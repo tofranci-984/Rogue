@@ -7,16 +7,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="exit">
-      <change afterPath="$PROJECT_DIR$/game/level_1.lvl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game/level_2.lvl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game/level_3.lvl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/game/level_test.lvl" afterDir="false" />
+    <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="level editor updates (file picker, potions, etc)">
+      <change afterPath="$PROJECT_DIR$/levels/level_1.lvl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels/level_2.lvl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels/level_3.lvl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/levels/level_test.lvl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/level_1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/level_2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/level_3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/level_editor.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/level_editor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_1.lvl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_2.lvl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_3.lvl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_test.lvl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +73,7 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.level editor.executor": "Run",
-    "Python.level_editor.executor": "Debug",
+    "Python.level_editor.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "com.codeium.enabled": "true",
@@ -85,7 +87,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected="Python.level_editor">
+  <component name="RunManager" selected="Python.main">
     <configuration name="level_editor" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Rogue" />
       <option name="ENV_FILES" value="" />
@@ -279,7 +281,23 @@
       <option name="project" value="LOCAL" />
       <updated>1725382068139</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="level editor updates (file picker, potions, etc)">
+      <option name="closed" value="true" />
+      <created>1725476094443</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1725476094443</updated>
+    </task>
+    <task id="LOCAL-00017" summary="level editor updates (file picker, potions, etc)">
+      <option name="closed" value="true" />
+      <created>1725476224522</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1725476224522</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -303,25 +321,16 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Initial commit" />
     <MESSAGE value="exit" />
-    <option name="LAST_COMMIT_MESSAGE" value="exit" />
+    <MESSAGE value="level editor updates (file picker, potions, etc)" />
+    <option name="LAST_COMMIT_MESSAGE" value="level editor updates (file picker, potions, etc)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>214</line>
-          <option name="timeStamp" value="72" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>149</line>
-          <option name="timeStamp" value="73" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/game/level_editor.py</url>
-          <line>171</line>
-          <option name="timeStamp" value="75" />
+          <line>349</line>
+          <option name="timeStamp" value="76" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

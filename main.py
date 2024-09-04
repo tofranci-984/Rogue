@@ -7,6 +7,7 @@ import datetime
 import random
 import pygame
 from typing import Tuple
+import os
 
 pygame.init()
 pygame.mixer.init()
@@ -81,24 +82,19 @@ class Game:
         # Create separate windows for each section
         self.game_window = curses.newwin(self.terminal_height - 3, self.terminal_width - 20, 0, 0)
         self.message_window = curses.newwin(3, self.terminal_width - 21, self.terminal_height - 6, 0)
+        self.message_window.scrollok(True)
         self.legend_window = curses.newwin(self.terminal_height - 3, 20, 0, self.terminal_width - 20)
         self.status_window = curses.newwin(3, 20, self.terminal_height - 6, self.terminal_width - 20)
+        # initialize message window
+        self.message_log = []
+
 
         self.player = None
         self.enemies = []
         self.weapons = []
-        self.level = 1  # initial level
+        self.level = "level_test.lvl"  # initial level
         self.event_log = []
         self.xp = 0
-
-        # initialize message window
-        # self.message_window = curses.newwin(3, self.terminal_width, self.terminal_height - 3, 0)
-        # self.message_window.scrollok(True)
-        self.message_log = []
-
-        # self.game_window = curses.newwin(self.terminal_height - 3, self.terminal_width, 0, 0)
-        # self.message_window = curses.newwin(3, self.terminal_width, self.terminal_height - 3, 0)
-        self.message_window.scrollok(True)
 
         # Load weapon and enemy data
         self.load_weapons()
@@ -163,9 +159,13 @@ class Game:
 
     def calculate_viewport(self):
         new_viewport_x = self.player_pos[0] - self.viewport_width // 2
-        new_viewport_y = self.player_pos[1] - self.viewport_height // 2
+        new_viewport_y = (self.player_pos[1] + 1)  - self.viewport_height // 2  # + 1 to account for the status bar
         self.viewport_x = max(0, min(new_viewport_x, self.level_width - self.viewport_width))
         self.viewport_y = max(0, min(new_viewport_y, self.level_height - self.viewport_height))
+        # new_viewport_x = self.player_pos[0] - self.viewport_width // 2
+        # new_viewport_y = self.player_pos[1] - self.viewport_height // 2
+        # self.viewport_x = max(0, min(new_viewport_x, self.level_width - self.viewport_width))
+        # self.viewport_y = max(0, min(new_viewport_y, self.level_height - self.viewport_height))
 
     def set_volume(self, volume):
         self.volume = max(0.0, min(1.0, volume))  # Ensure volume is between 0 and 1
@@ -342,10 +342,12 @@ class Game:
         pass
 
     def load_level(self):
-        filename = f"game/level_{self.level}"
-        logger.debug(f"Loading level {self.level} from {filename}")
+        filename = f"levels/{self.level}"
+        path, filename = os.path.split(filename)
+        logger.debug(f"Loading level {self.level} from {path}")
+        self.add_message(f"Loading level {self.level} from {path}")
         try:
-            with open(filename, 'r') as f:
+            with open(f"{path}/{filename}", 'r') as f:
                 level_data = json.load(f)
             self.level_width = level_data['width']
             self.level_height = level_data['height']

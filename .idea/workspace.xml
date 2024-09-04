@@ -8,11 +8,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="exit">
-      <change afterPath="$PROJECT_DIR$/game/level_editor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/level_1.lvl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/level_2.lvl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/level_3.lvl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/game/level_test.lvl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/enemies.json" beforeDir="false" afterPath="$PROJECT_DIR$/game/enemies.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/level_editor.py" beforeDir="false" afterPath="$PROJECT_DIR$/game/level_editor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,25 +67,26 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.level editor.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;com.codeium.enabled&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main-new&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.level editor.executor": "Run",
+    "Python.level_editor.executor": "Debug",
+    "Python.main.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "main",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
-      &quot;Requirements&quot;
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Requirements"
     ]
   }
-}</component>
-  <component name="RunManager" selected="Python.level editor">
-    <configuration name="level editor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+}]]></component>
+  <component name="RunManager" selected="Python.level_editor">
+    <configuration name="level_editor" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Rogue" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -95,7 +100,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game/level editor.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/game/level_editor.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="true" />
@@ -130,11 +135,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.main" />
-      <item itemvalue="Python.level editor" />
+      <item itemvalue="Python.level_editor" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.level editor" />
+        <item itemvalue="Python.level_editor" />
       </list>
     </recent_temporary>
   </component>
@@ -312,6 +317,11 @@
           <url>file://$PROJECT_DIR$/main.py</url>
           <line>149</line>
           <option name="timeStamp" value="73" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/game/level_editor.py</url>
+          <line>171</line>
+          <option name="timeStamp" value="75" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -1,13 +1,14 @@
 import curses
 import json
+import os
 
 
 class LevelEditor:
     def __init__(self, screen):
         self.screen = screen
         self.height, self.width = screen.getmaxyx()
-        self.level_width = 80
-        self.level_height = 40
+        self.level_width = 40
+        self.level_height = 20
         self.grid = [['.' for _ in range(self.level_width)] for _ in range(self.level_height)]
         self.entry_point = None
         self.exit_point = None
@@ -15,6 +16,8 @@ class LevelEditor:
         self.message = ""
         self.paint_mode = False
         self.paint_tile = '.'
+        self.filename = ""
+        self.level_extension= ".lvl"
 
     def draw_screen(self):
         self.screen.clear()
@@ -26,36 +29,47 @@ class LevelEditor:
                 if y < max_y - 1 and x < max_x - 1:
                     self.screen.addch(y, x, cell)
 
-        # Draw legend
-        legend_x = min(self.level_width + 2, max_x - 20)  # Ensure legend fits on screen
+            # Draw legend
+        legend_x = min(self.level_width + 2, max_x - 40)  # Ensure legend fits on screen
         legend_items = [
-            ("Legend:", 0),
-            (". - Floor", 1),
-            ("# - Wall", 2),
-            ("+ - Door", 3),
-            ("^ - Trap", 4),
-            ("@ - Entry", 5),
-            ("E - Exit", 6),
-            ("M - Monster", 7),
-            ("G - Gold", 8),
-            ("< - Stairs Up", 9),
-            ("> - Stairs Down", 10),
-            ("", 11),
-            ("Arrow keys: Move", 12),
-            ("Space: Place tile", 13),
-            ("P: Toggle paint mode", 14),
-            ("S: Save", 15),
-            ("L: Load", 16),
-            ("Q: Quit", 17),
-            ("", 18),
-            (f"Cursor: {self.cursor_y}, {self.cursor_x}", 19),
-            (f"Paint mode: {'ON' if self.paint_mode else 'OFF'}", 20),
-            (f"Paint tile: {self.paint_tile}", 21)
+            "Legend:",
+            f"Cursor: {self.cursor_y}, {self.cursor_x}",
+            ". - Floor",
+            "# - Wall",
+            "+ - Door",
+            "^ - Trap",
+            "@ - Entry",
+            "X - Exit",
+            "E - Enemy",
+            "G - Gold",
+            "< - Stairs Up",
+            "> - Stairs Down",
+            "T - Treasure",
+            "P - RandomPotion",
+            "M - Mana Potion",
+            "H - Healing Potion",
+            "",
+            "",
+            "Arrow keys: Move",
+            "Space: Place tile",
+            "P: Toggle paint mode",
+            "S: Save",
+            "L: Load",
+            "Q: Quit",
+            "",
+            f"Paint mode: {'ON' if self.paint_mode else 'OFF'}",
+            "",
+            f"Paint tile: {self.paint_tile}",
+            ""
         ]
 
-        for text, y_offset in legend_items:
-            if y_offset < max_y - 1:
-                self.screen.addnstr(y_offset, legend_x, text, max_x - legend_x - 1)
+        column1_items = legend_items[::2]
+        column2_items = legend_items[1::2]
+
+        for i, (text1, text2) in enumerate(zip(column1_items, column2_items)):
+            if i < max_y - 1:
+                self.screen.addnstr(i, legend_x, text1, max_x - legend_x - 1)
+                self.screen.addnstr(i, legend_x + 21, text2, max_x - legend_x - 1)
 
         # Draw message at the bottom
         if max_y > 2:
@@ -123,12 +137,12 @@ def main(screen):
         elif key == curses.KEY_RIGHT and editor.cursor_x < editor.level_width - 1:
             editor.cursor_x += 1
         elif key == ord(' '):
-            editor.message = "Enter tile type (. # + ^ @ E M G < >): "
+            editor.message = "Enter tile type (. # + ^ @ E X P H M G T < >): "
             editor.draw_screen()
             curses.echo()
             tile = chr(screen.getch())
             curses.noecho()
-            if tile in '.#+^@EMG<>':
+            if tile in '.#+^@EXPHMGT<>':
                 editor.set_tile(tile)
                 editor.paint_tile = tile
             editor.message = f"Placed tile: {tile}"
@@ -136,19 +150,55 @@ def main(screen):
             editor.paint_mode = not editor.paint_mode
             editor.message = f"Paint mode {'enabled' if editor.paint_mode else 'disabled'}"
         elif key == ord('s'):
-            editor.message = "Enter filename to save: "
-            editor.draw_screen()
-            curses.echo()
-            filename = screen.getstr(editor.height - 2, len(editor.message)).decode('utf-8')
-            curses.noecho()
-            editor.save_level(filename)
+            files = [f for f in os.listdir('.') if f.endswith('.lvl')]
+            if not files:
+                editor.message = "No .lvl files found. Enter filename to save: "
+            else:
+                editor.message = "Save Level"
+                screen.clear()  # clear the screen
+                screen.addstr(1, 1, "Select a file to save as, or enter a new filename:")  # print the prompt
+                for i, file in enumerate(files):
+                    screen.addstr(i + 2, 1, f"{i + 1}. {file}")  # print the file list
+                screen.addstr(len(files) + 3, 1, "Enter filename or number (Q to cancel): ")  # print the input prompt
+                screen.refresh()  # update the screen
+                curses.echo()
+                choice = screen.getstr().decode('utf-8')
+                if choice.upper() == 'Q':
+                    editor.message = "Save cancelled"
+                    editor.draw_screen()  # redraw the editor screen
+                elif choice.isdigit() and 1 <= int(choice) <= len(files):
+                    filename = files[int(choice) - 1]
+                else:
+                    filename = choice
+                if not filename.endswith('.lvl'):
+                    filename += '.lvl'
+                curses.noecho()
+                editor.save_level(filename)
+                editor.draw_screen()  # redraw the editor screen
         elif key == ord('l'):
-            editor.message = "Enter filename to load: "
-            editor.draw_screen()
-            curses.echo()
-            filename = screen.getstr(editor.height - 2, len(editor.message)).decode('utf-8')
-            curses.noecho()
-            editor.load_level(filename)
+            files = [f for f in os.listdir('.') if f.endswith('.lvl')]
+            if not files:
+                editor.message = "No .lvl files found. Enter filename to load: "
+            else:
+                editor.message = "Load Level"
+                screen.clear()  # clear the screen
+                screen.addstr(1, 1, "Select a file to load, or enter a new filename:")  # print the prompt
+                for i, file in enumerate(files):
+                    screen.addstr(i + 2, 1, f"{i + 1}. {file}")  # print the file list
+                screen.addstr(len(files) + 3, 1, "Enter filename or number (Q to cancel): ")  # print the input prompt
+                screen.refresh()  # update the screen
+                curses.echo()
+                choice = screen.getstr().decode('utf-8')
+                if choice.upper() == 'Q':
+                    editor.message = "Load cancelled"
+                    editor.draw_screen()  # redraw the editor screen
+                elif choice.isdigit() and 1 <= int(choice) <= len(files):
+                    filename = files[int(choice) - 1]
+                else:
+                    filename = choice
+                curses.noecho()
+                editor.load_level(filename)
+                editor.draw_screen()  # redraw the editor screen
 
         # Paint mode: place tile if paint mode is on
         if editor.paint_mode:

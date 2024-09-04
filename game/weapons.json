@@ -1,0 +1,77 @@
+[
+  {
+    "name": "Rusty Dagger",
+    "damage": 3,
+    "attack_range": 1
+  },
+  {
+    "name": "Short Sword",
+    "damage": 5,
+    "attack_range": 1
+  },
+  {
+    "name": "Long Sword",
+    "damage": 7,
+    "attack_range": 1
+  },
+  {
+    "name": "Battle Axe",
+    "damage": 9,
+    "attack_range": 1
+  },
+  {
+    "name": "War Hammer",
+    "damage": 8,
+    "attack_range": 1
+  },
+  {
+    "name": "Shortbow",
+    "damage": 4,
+    "attack_range": 5
+  },
+  {
+    "name": "Longbow",
+    "damage": 6,
+    "attack_range": 8
+  },
+  {
+    "name": "Crossbow",
+    "damage": 7,
+    "attack_range": 6
+  },
+  {
+    "name": "Throwing Knife",
+    "damage": 3,
+    "attack_range": 3
+  },
+  {
+    "name": "Staff",
+    "damage": 4,
+    "attack_range": 2
+  },
+  {
+    "name": "Spear",
+    "damage": 6,
+    "attack_range": 2
+  },
+  {
+    "name": "Mace",
+    "damage": 7,
+    "attack_range": 1
+  },
+  {
+    "name": "Sling",
+    "damage": 3,
+    "attack_range": 4
+  },
+  {
+    "name": "Magic Wand",
+    "damage": 5,
+    "attack_range": 6
+  },
+  {
+    "name": "Flail",
+    "damage": 8,
+    "attack_range": 1
+  }
+]

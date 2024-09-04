@@ -1,0 +1,20 @@
+2024-09-03 14:57:47,863 Start main
+2024-09-03 14:57:47,863 
+Create Game
+2024-09-03 14:57:47,863 Loading weapons from 'game/weapons.json'
+2024-09-03 14:57:47,864 Loaded 15 weapons
+2024-09-03 14:57:47,864 Loading enemies from 'game/enemies.json'
+2024-09-03 14:57:47,864 Loaded 28 enemies
+2024-09-03 14:57:47,864 Loading level 1 from game/level_1
+2024-09-03 14:57:47,864 Level data: width=40, height=20, grid size=20x40
+2024-09-03 14:57:47,866 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-03 14:57:52,067 new_cell=., dy=0, dx=1, new_y=1, new_x=2
+2024-09-03 14:57:52,650 new_cell=., dy=0, dx=1, new_y=1, new_x=3
+2024-09-03 14:57:53,060 new_cell=., dy=0, dx=1, new_y=1, new_x=4
+2024-09-03 14:57:53,549 new_cell=., dy=0, dx=1, new_y=1, new_x=5
+2024-09-03 14:57:54,002 new_cell=., dy=0, dx=1, new_y=1, new_x=6
+2024-09-03 14:57:54,698 new_cell=., dy=0, dx=1, new_y=1, new_x=7
+2024-09-03 14:57:54,698 Enemy in range!, dy=0, dx=1, new_y=1, new_x=7, y=1, x=8
+2024-09-03 14:57:58,299 new_cell=E, dy=0, dx=1, new_y=1, new_x=8
+2024-09-03 14:57:58,299 Enemy in range!, dy=0, dx=1, new_y=1, new_x=8, y=1, x=8
+2024-09-03 14:57:58,299 Unknown object encountered E at new_y:1, new_x:8

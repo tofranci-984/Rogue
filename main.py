@@ -39,12 +39,16 @@ class Potion:
     def __init__(self, type):
         if type == "health":
             self.name = "Health Potion"
-        elif type == "mana": self.name = "Mana Potion"
-        elif type == "strength": self.name = "Strength Potion"
-        elif type == "dexterity": self.name = "Dexterity Potion"
-        self.type = type
-        self.description = "Restores 10 health"
-        self.health_restored = 10
+            self.description = "Restores 10 health"
+            self.health_restored = 10
+        elif type == "mana":
+            self.name = "Mana Potion"
+            self.description = "Restores 10 mana"
+            self.mana_restored = 10
+        elif type == "strength":
+            self.name = "Strength Potion"
+            self.description = "Increases strength by 10%"
+            self.strength_increase = 10
 
 class Player:
     def __init__(self, name, hp, weapons, gold=0):
@@ -114,7 +118,7 @@ class Game:
         self.show_debug_info = True
 
         message_window_height = 3
-        self.message_window = curses.newwin(3, 40, 20, 0)
+        self.message_window = curses.newwin(4, 40, 20, 0)
         self.message_window.scrollok(True)
 
         # Load weapon and enemy data
@@ -142,7 +146,8 @@ class Game:
 
         self.game_window = curses.newwin(game_window_height, game_window_width, 0, 0)
 
-        self.legend_window = curses.newwin(game_window_height, self.legend_width, 0, self.viewport_width + 1)
+        self.legend_window = curses.newwin(self.terminal_height, self.legend_width, 0, self.viewport_width + 1)
+        # self.legend_window = curses.newwin(game_window_height, self.legend_width, 0, self.viewport_width + 1)
 
         if self.viewport_width > self.level_width:
             self.viewport_width = self.level_width
@@ -165,24 +170,31 @@ class Game:
         self.enemy_sound = pygame.mixer.Sound("sounds/heal.wav")
         # self.soundON = True
         self.soundON = False
+        self.add_message("Game initialized")
 
-    def update_message_window(self):
+    def update_message_window(self, message_window_height=4):
         """
         Update the message window with the latest messages.
         """
+        max_y = self.message_window.getmaxyx()[0]
+        if max_y < message_window_height:
+            message_window_height = max_y
+        message_count = len(self.message_log)
         self.message_window.erase()
-        for i, message in enumerate(self.message_log[-3:]):
-            self.message_window.addstr(i, 0, message)
-
+        for i, message in enumerate(self.message_log[-message_window_height:]):
+            # if i < self.message_window.getmaxyx()[0] and len(message) < self.message_window.getmaxyx()[1]:
+            if i <= max_y and len(message) < self.message_window.getmaxyx()[1]:
+                self.message_window.addstr(i, 0, message)
         self.message_window.refresh()
 
-    def add_message(self, message):
+
+    def add_message(self, message, message_window_height=4):
         """
         Add a message to the message log.
         """
         self.message_log.append(message)
         logger.debug(f"{message}")
-        self.update_message_window()
+        self.update_message_window(message_window_height)
 
     def calculate_viewport(self):
         new_viewport_x = self.player_pos[0] - self.viewport_width // 2
@@ -212,6 +224,7 @@ class Game:
         new_y = self.player_pos[1] + dy
         new_x = self.player_pos[0] + dx
         move_player = True
+        monster_adjacent = False
 
         if 0 <= new_y < self.level_height and 0 <= new_x < self.level_width:
             new_cell = self.grid[new_y][new_x]
@@ -240,46 +253,65 @@ class Game:
                                 # For example, you could add a message to the player or choose an enemy at a higher level
                                 logger.debug(f"No enemies at or below your level!: LVL={self.player.level}")
                                 enemy = random.choice(self.enemies)  # Choose a random enemy
+
+                            self.message_window.erase()
+                            self.message_window.refresh()
+
+                            # Expand message log for combat
+                            self.message_window.resize(self.viewport_height - 5, self.viewport_width)
+                            self.message_window.mvwin(0, 0)
+                            self.message_window.refresh()
+
+                            self.game_window.erase()
+                            self.game_window.refresh()
+
                             while self.player.hp > 0 and enemy.hp > 0:
-                                self.add_message(f"You are in range of a {enemy.name}!")
-                                self.add_message("Do you want to (A)ttack or (F)lee? ")
+                                self.add_message(f"You are in range of a {enemy.name}!", 20)
+                                self.add_message("Do you want to (A)ttack or (F)lee? ", 20)
                                 key = self.screen.getch()
                                 if key == ord('a'):
                                     # Player attacks
                                     attack_damage = random.randint(1, self.player.weapon.damage)
                                     enemy.hp -= attack_damage
                                     self.add_message(
-                                        f"You attack {enemy.name} for {attack_damage} damage.")
-                                    self.add_message(f"{enemy.name} down to HP ({enemy.hp}/{enemy.start_hp})")
+                                        f"You attack {enemy.name} for {attack_damage} damage.", 20)
+                                    self.add_message(f"{enemy.name} HP ({enemy.hp}/{enemy.start_hp})", 20)
                                     if self.soundON:
                                         self.enemy_sound.play()
 
                                     if enemy.hp <= 0:
-                                        self.add_message(f"You defeated the {enemy.name}!")
+                                        self.add_message(f"You defeated the {enemy.name}!", 20)
                                         self.enemies.remove(enemy)
                                         self.grid[y][x] = '.'  # clear the enemy cell
                                         self.game_window.refresh()
-                                        self.add_message(f"You gained {enemy.xp} XP!")
+                                        self.add_message(f"You gained {enemy.xp} XP!", 20)
                                         self.player.xp += enemy.xp
+                                        # Restore message log size
+                                        self.message_window.resize(4, 40)
+                                        self.message_window.mvwin(20, 0)
+                                        self.message_window.refresh()
+
                                         break
 
                                     # Enemy attacks
                                     attack_damage = random.randint(1, enemy.damage)
                                     self.player.hp -= attack_damage
-                                    self.add_message(f"{enemy.name} attacks you for {attack_damage} damage.")
-                                    self.update()  # Update the game window, legend window, and message window
+                                    self.add_message(f"{enemy.name} attacks you for {attack_damage} damage.", 20)
+
+
+                                    # self.update()  # Update the game window, legend window, and message window
                                     if self.soundON:
                                         self.enemy_sound.play()
 
                                     if self.player.hp <= 0:
-                                        self.add_message(f"You have been defeated by the {enemy.name}!")
+                                        self.add_message(f"You have been defeated by the {enemy.name}!", 20)
                                         self.game_over = True
                                         break
                                 elif key == ord('f'):
                                     # Player flees
-                                    self.add_message("You attempt to flee!")
+                                    self.add_message("You attempt to flee!", 20)
                                     self.add_message(
-                                        "Which direction do you want to move? (N)orth, (S)outh, (E)ast, (W)est? ")
+                                        "Which direction do you want to move? (N)orth, (S)outh, (E)ast, (W)est? ", 20)
                                     self.screen.refresh()
                                     key = self.screen.getch()
                                     if key == ord("n"):
@@ -295,106 +327,123 @@ class Game:
                                         new_y = self.player_pos[1]
                                         new_x = self.player_pos[0] - 1
                                     else:
-                                        self.add_message("Invalid direction!")
+                                        self.add_message("Invalid direction!", 20)
                                         self.screen.refresh()
                                         continue
 
-                                    # Check if the new position is within the grid
+                                        # Check if the new position is within the grid
                                     if 0 <= new_x < len(self.grid[0]) and 0 <= new_y < len(self.grid):
                                         self.grid[self.player_pos[1]][self.player_pos[0]] = '.'
                                         self.grid[new_y][new_x] = '@'
                                         self.player_pos = (new_x, new_y)
-                                        self.add_message("You successfully fled!")
+                                        self.add_message("You successfully fled!", 20)
                                         break
                                     else:
-                                        self.add_message("You cannot move that way!")
+                                        self.add_message("You cannot move that way!", 20)
                                         continue
 
-                                else:
-                                    self.add_message("Invalid action!")
-                                    continue
+                                # break
+                            if monster_adjacent:
+                                break
 
-                        # break
-                if monster_adjacent:
-                    break
-
-            if not monster_adjacent:
-                if new_cell == '.' or new_cell == '@':  # floor or player
-                    # Move to empty space or current position
-                    self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace with blank
-                    self.grid[new_y][new_x] = '@'
-                    self.player_pos = [new_x, new_y]
-                    self.add_message("You moved.")
-                elif new_cell == '#':  # wall
-                    self.add_message("You bumped into a wall.")
-                    move_player = False
-                elif new_cell == '$' or new_cell == 'G':  # gold
-                    self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace gold with blank
-                    self.grid[new_y][new_x] = '!'
-                    self.player_pos = [new_x, new_y]
-                    if self.soundON:
-                        self.gold_sound.play()
-                    # insert treasure logic here
-                    new_gold = random.randint(1, 100)
-                    self.add_message(f"You have found {new_gold} gold!")
-                    self.player.gold += new_gold
-                elif new_cell == '^':  # trap
-                    self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace trap with blank
-                    self.grid[new_y][new_x] = '!'
-                    self.player_pos = [new_x, new_y]
-                    if self.player.hp > 0:
-                        hp = random.randint(1, int(self.player.hp / 3))
-                    else:
-                        hp = 0
-                    self.player.hp -= hp
-                    self.add_message(f"You have triggered a trap! You suffered {hp} damage!")
-                    if self.soundON:
-                        self.enemy_sound.play()
-                    if self.player.hp <= 0:  # should never happen as we choose hp from 1 to hp / 3
-                        self.add_message("You have been defeated by the trap!")
-                        self.game_over = True
-                elif new_cell == '>':  # stairs down
-                    self.add_message("You found stairs going down")
-                    self.level += 1
-                    self.level_filename = f"{self.level}.lvl"
-                    self.load_level()
-                    self.player_pos = self.entry_point
-                    move_player = False
-                elif new_cell == '<':  # stairs up
-                    self.add_message("You found stairs going up")
-                    self.level -= 1
-                    self.level_filename = f"{self.level}.lvl"
-                    self.load_level()
-                    self.player_pos = self.entry_point
-                    move_player = False
-                elif new_cell == 'H':  # health potion
+        if not monster_adjacent:
+            if new_cell == '.' or new_cell == '@':  # floor or player
+                # Move to empty space or current position
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace with blank
+                self.grid[new_y][new_x] = '@'
+                self.player_pos = [new_x, new_y]
+                self.add_message("You moved.")
+                self.game_window.refresh()
+            elif new_cell == '#':  # wall
+                self.add_message("You bumped into a wall.")
+                move_player = False
+            elif new_cell == '$' or new_cell == 'G':  # gold
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace gold with blank
+                self.grid[new_y][new_x] = '!'
+                self.player_pos = [new_x, new_y]
+                if self.soundON:
+                    self.gold_sound.play()
+                # insert treasure logic here
+                new_gold = random.randint(1, 100)
+                self.add_message(f"You have found {new_gold} gold!")
+                self.player.gold += new_gold
+            elif new_cell == '^':  # trap
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace trap with blank
+                self.grid[new_y][new_x] = '!'
+                self.player_pos = [new_x, new_y]
+                if self.player.hp > 0:
+                    hp = random.randint(1, int(self.player.hp / 3))
+                else:
+                    hp = 0
+                self.player.hp -= hp
+                self.add_message(f"You have triggered a trap! You suffered {hp} damage!")
+                if self.soundON:
+                    self.enemy_sound.play()
+                if self.player.hp <= 0:  # should never happen as we choose hp from 1 to hp / 3
+                    self.add_message("You have been defeated by the trap!")
+                    self.game_over = True
+            elif new_cell == '>':  # stairs down
+                self.add_message("You found stairs going down")
+                self.level += 1
+                self.level_filename = f"{self.level}.lvl"
+                self.load_level()
+                self.player_pos = self.entry_point
+                move_player = False
+            elif new_cell == '<':  # stairs up
+                self.add_message("You found stairs going up")
+                self.level -= 1
+                self.level_filename = f"{self.level}.lvl"
+                self.load_level()
+                self.player_pos = self.entry_point
+                move_player = False
+            elif new_cell == 'H':  # health potion
+                self.add_message("You found a health potion")
+                self.player.items.append(Potion("health"))
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace potion with blank
+                self.grid[new_y][new_x] = '!'
+                self.player_pos = [new_x, new_y]
+                if self.soundON:
+                    self.gold_sound.play()
+            elif new_cell == 'M':  # mana potion
+                self.add_message("You found a mana potion")
+                self.player.items.append(Potion("mana"))
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace potion with blank
+                self.grid[new_y][new_x] = '!'
+                self.player_pos = [new_x, new_y]
+                if self.soundON:
+                    self.gold_sound.play()
+            elif new_cell == 'P':  # random potion
+                if random.randint(0, 1) == 0:
                     self.add_message("You found a health potion")
-                    # move_player = True
-                    self.player.items.append(self.health_potion)
+                    self.player.items.append(Potion("health"))
                     self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace potion with blank
                     self.grid[new_y][new_x] = '!'
                     self.player_pos = [new_x, new_y]
                     if self.soundON:
                         self.gold_sound.play()
-                    # insert treasure logic here
-                    increase_hp = random.randint(1, self.player.level * 10)
-                    self.add_message(f"You have restored {increase_hp} health")
-                    self.update()
-                    self.player.hp += increase_hp
-                    if self.player.hp > self.player.max_hp:
-                        self.player.hp = self.player.max_hp
-                elif new_cell == 'X':
-                    self.add_message("You found the exit!")
-                    self.game_over = True
-                    # Add level completion logic here
+
                 else:
-                    logger.debug(f"Unknown object encountered {new_cell} at new_y:{new_y}, new_x:{new_x}")
-                    self.add_message(f"You encountered an unknown object: {new_cell}")
-                    move_player = False
+                    self.add_message("You found a mana potion")
+                    self.player.items.append(Potion("mana"))
+                    self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace potion with blank
+                    self.grid[new_y][new_x] = '!'
+                    self.player_pos = [new_x, new_y]
+                    if self.soundON:
+                        self.gold_sound.play()
+            elif new_cell == 'X':
+                self.add_message("You found the exit!")
+                self.game_over = True
+                # Add level completion logic here
+            else:
+                logger.debug(f"Unknown object encountered {new_cell} at new_y:{new_y}, new_x:{new_x}")
+                self.add_message(f"You encountered an unknown object: {new_cell}")
+                move_player = False
 
             if self.player_pos != (new_x, new_y) and move_player:  # Only update if the player actually moved
                 self.player_pos = [new_x, new_y]
                 self.calculate_viewport()  # Update viewport after moving player
+                self.update()
+
 
     def load_weapons(self):
         logger.debug(f"Loading weapons from 'game/weapons.json'")
@@ -403,7 +452,7 @@ class Game:
             weapons_data = json.load(f)
         for weapon in weapons_data:
             self.weapons.append(Weapon(**weapon))
-        logger.debug(f"Loaded {len(self.weapons)} weapons")
+        self.add_message(f"Loaded {len(self.weapons)} weapons")
 
     def load_enemies(self):
         logger.debug(f"Loading enemies from 'game/enemies.json'")
@@ -411,7 +460,7 @@ class Game:
             enemies_data = json.load(f)
         for enemy in enemies_data:
             self.enemies.append(Enemy(**enemy))
-        logger.debug(f"Loaded {len(self.enemies)} enemies")
+        self.add_message(f"Loaded {len(self.enemies)} enemies")
 
     def generate_level(self):
         # Logic for generating a random level
@@ -422,7 +471,6 @@ class Game:
         if not filename.endswith('.lvl'):
             filename += '.lvl'
         path, filename = os.path.split(filename)
-        logger.debug(f"Loading level {self.level} from {path}")
         self.add_message(f"Loading level {self.level} from {path}")
         try:
             with open(f"{path}/{filename}", 'r') as f:
@@ -437,11 +485,10 @@ class Game:
                 f"Level data: width={self.level_width}, height={self.level_height}, grid size={len(self.grid)}x{len(self.grid[0]) if self.grid else 0}")
             return level_data
         except FileNotFoundError:
-            logger.error(f"File {filename} not found")
             self.add_message(f"Error: Level {self.level} not found")
         except json.JSONDecodeError:
             logger.error(f"Invalid JSON in {filename}")
-            self.add_message(f"Error: Invalid level data for level {self.level}")
+            self.add_message(f"Error: Invalid level data for level {self.level}, in {filename}")
         except Exception as e:
             logger.error(f"Unexpected error loading level: {str(e)}")
             self.add_message(f"Error: Failed to load level {self.level}")
@@ -465,7 +512,45 @@ class Game:
         elif key == ord('s'):
             self.save_game()
         elif key == ord('l'):
-            self.load_game()
+            # self.load_game()
+            self.add_message("Game loaded")
+            # return True
+        elif key == 76:  # shift L
+            # show message log
+            self.view_message_log()
+        elif key == ord('h'):
+            # drink health potion
+            if self.player.hp == self.player.max_hp:
+                self.add_message("You already have full health!")
+                return True
+            for item in self.player.items:
+                if isinstance(item, Potion) and item.name == "Health Potion":
+                    if item.health_restored + self.player.hp > self.player.max_hp:
+                        self.player.hp = self.player.max_hp
+                    else:
+                        self.player.hp += item.health_restored
+                    self.player.items.remove(item)
+                    self.add_message("You drank a health potion!")
+                    break
+            else:
+                self.add_message("You don't have a health potion!")
+        elif key == ord('m'):
+            # drink health potion
+            if self.player.mana == self.player.max_mana:
+                self.add_message("You already have full mana!!")
+                return True
+            for item in self.player.items:
+                if isinstance(item, Potion) and item.name == "Mana Potion":
+                    if item.mana_restored + self.player.mana > self.player.max_mana:
+                        self.player.mana = self.player.max_mana
+                    else:
+                        self.player.mana += item.mana_restored
+                    self.player.items.remove(item)
+                    self.add_message("You drank a mana potion!")
+                    break
+            else:
+                self.add_message("You don't have a mana potion!")
+
         elif key == curses.KEY_UP:
             self.move_player(-1, 0)
         elif key == curses.KEY_DOWN:
@@ -480,11 +565,41 @@ class Game:
             self.decrease_volume()
         elif key == ord('1'):
             self.view_message_log()
+        elif key == ord('2'):
+            self.legend_window.erase()
+            self.legend_window.refresh()
+            self.show_inventory()
         elif key == ord('S'):  # Shift-D (capital S in curses)
             self.show_debug_info = not self.show_debug_info
             self.add_message("Debug info toggled")
 
         return True
+
+    def show_inventory(self):
+        # max_y, max_x = self.screen.getmaxyx()
+        self.legend_window.erase()
+        self.legend_window.addstr(0, 0, "Inventory:")
+        self.legend_window.refresh()
+        for i, item in enumerate(self.player.items):
+            if isinstance(item, Weapon):
+                self.legend_window.addstr(i + 1, 0, f"- {item.name} (Damage: {item.damage})")
+            elif isinstance(item, Potion):
+                if item.name == "Health Potion":
+                    self.legend_window.addstr(i + 1, 0, f"- {item.name} (Restores: {item.health_restored} HP)")
+                elif item.name == "Mana Potion":
+                    self.legend_window.addstr(i + 1, 0, f"- {item.name} (Restores: {item.mana_restored} MP)")
+                elif item.name == "Strength Potion":
+                    self.legend_window.addstr(i + 1, 0, f"- {item.name} (Increases: {item.strength_increase}%)")
+            else:
+                self.legend_window.addstr(i + 1, 0, f"- {item.name}")
+        self.legend_window.refresh()
+        max_y, max_x = self.legend_window.getmaxyx()
+        self.legend_window.addnstr(max_y - 5, 0, "Press any key to exit", max_x - 1)
+        self.legend_window.refresh()
+        key = self.screen.getch()
+        self.legend_window.clear()
+        self.legend_window.refresh()
+        self.screen.refresh()
 
     def view_message_log(self):
         self.screen.clear()
@@ -508,12 +623,13 @@ class Game:
             elif key == ord('k'):
                 if offset > 0:
                     offset -= 1
+            self.screen.clear()
+            self.screen.refresh()
 
     def update(self):
         # Calculate available space for legend
         available_width = self.terminal_width - self.legend_width
         legend_start_x = min(self.level_width, available_width - self.legend_width)
-
 
         # Clear all windows
         self.game_window.erase()
@@ -525,7 +641,6 @@ class Game:
         self.legend_window.erase()
         self.legend_window.bkgd(" ", curses.color_pair(1))
         self.legend_window.refresh()
-        # self.status_window.erase()
 
         # Print the visible portion of the level
         for y in range(self.viewport_height):
@@ -557,7 +672,6 @@ class Game:
 
         # Draw column separator
         self.screen.vline(0, self.viewport_width, curses.ACS_VLINE, self.viewport_height)
-        self.screen.refresh()
         self.game_window.refresh()
         self.screen.refresh()
 
@@ -600,8 +714,25 @@ class Game:
         self.legend_window.addstr(14, 0, gold, curses.color_pair(4))
         self.legend_window.refresh()
 
+        # Display player inventory
+        self.legend_window.addstr(15, 0, "Inventory:")
+        for i, item in enumerate(self.player.items):
+            if 16 + i < self.legend_window.getmaxyx()[0]:
+                if isinstance(item, Weapon):
+                    self.legend_window.addstr(16 + i, 0, f"- {item.name} (Damage: {item.damage})")
+                elif isinstance(item, Potion):
+                    if hasattr(item, 'health_restored'):
+                        self.legend_window.addstr(16 + i, 0, f"- {item.name} (Restores: {item.health_restored} HP)")
+                    elif hasattr(item, 'mana_restored'):
+                        self.legend_window.addstr(16 + i, 0, f"- {item.name} (Restores: {item.mana_restored} MP)")
+                    elif hasattr(item, 'strength_increase'):
+                        self.legend_window.addstr(16 + i, 0,
+                              f"- {item.name} (Increases strength by {item.strength_increase}%)")
+                else:
+                    self.legend_window.addstr(16 + i, 0, f"- {item.name}")
+
         # Display the messages
-        for i, message in enumerate(self.message_log[-3:]):
+        for i, message in enumerate(self.message_log[-4:]):
             self.message_window.addstr(i, 0, message)
 
         # Refresh all windows
@@ -627,7 +758,6 @@ class Game:
             self.update()
             self.render()
         curses.endwin()
-
 
 if __name__ == "__main__":
     logger.debug("Start main")

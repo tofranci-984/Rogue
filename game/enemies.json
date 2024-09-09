@@ -1,7 +1,7 @@
 [
     {
         "name": "Giant Rat",
-        "hp": 10,
+        "hp": 7,
         "damage": 2,
         "sense_range": 2,
         "level": 1,
@@ -9,17 +9,33 @@
     },
     {
         "name": "Wolf",
-        "hp": 12,
+        "hp": 9,
         "damage": 2,
         "sense_range": 3,
         "level": 1,
-        "xp": 10
+        "xp": 5
+    },
+    {
+        "name": "Great Wolf",
+        "hp": 17,
+        "damage": 4,
+        "sense_range": 3,
+        "level": 2,
+        "xp": 5
     },
     {
         "name": "Rabid Badger",
-        "hp": 16,
+        "hp": 10,
         "damage": 2,
         "sense_range": 3,
+        "level": 1,
+        "xp": 3
+    },
+    {
+        "name": "Stray Dog",
+        "hp": 10,
+        "damage": 1,
+        "sense_range": 2,
         "level": 1,
         "xp": 2
     },
@@ -197,7 +213,7 @@
         "damage": 10,
         "sense_range": 5,
         "level": 8,
-        "xp": 31
+        "xp": 40
     },
     {
         "name": "Cyclops",
@@ -205,7 +221,7 @@
         "damage": 11,
         "sense_range": 3,
         "level": 9,
-        "xp": 56
+        "xp": 50
     },
     {
         "name": "Dragon",
@@ -213,7 +229,7 @@
         "damage": 12,
         "sense_range": 5,
         "level": 10,
-        "xp": 21
+        "xp": 50
     },
     {
         "name": "Hydra",
@@ -221,6 +237,6 @@
         "damage": 13,
         "sense_range": 4,
         "level": 12,
-        "xp": 104
+        "xp": 60
     }
 ]

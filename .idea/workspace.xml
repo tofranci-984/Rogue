@@ -9,7 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="level editor updates (file picker, potions, etc)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/levels/1.lvl" beforeDir="false" afterPath="$PROJECT_DIR$/levels/1.lvl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/enemies.json" beforeDir="false" afterPath="$PROJECT_DIR$/game/enemies.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -67,7 +67,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.level editor.executor": "Run",
     "Python.level_editor.executor": "Run",
-    "Python.main.executor": "Debug",
+    "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "com.codeium.enabled": "true",
     "git-widget-placeholder": "main",
@@ -322,7 +322,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725888640210</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="level editor updates (file picker, potions, etc)">
+      <option name="closed" value="true" />
+      <created>1725907322503</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1725907322503</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -369,23 +377,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>302</line>
-          <option name="timeStamp" value="128" />
+          <line>271</line>
+          <option name="timeStamp" value="170" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>261</line>
-          <option name="timeStamp" value="144" />
+          <line>268</line>
+          <option name="timeStamp" value="171" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>379</line>
-          <option name="timeStamp" value="145" />
+          <line>579</line>
+          <option name="timeStamp" value="178" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>372</line>
-          <option name="timeStamp" value="146" />
+          <line>596</line>
+          <option name="timeStamp" value="179" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

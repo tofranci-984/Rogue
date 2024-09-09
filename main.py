@@ -27,11 +27,24 @@ class Enemy:
     def __init__(self, name, hp, damage, sense_range, level, xp):
         self.name = name
         self.hp = hp
+        self.start_hp = None
+        self.start_hp = hp
         self.damage = damage
         self.sense_range = sense_range
         self.level = level
         self.xp = xp
 
+
+class Potion:
+    def __init__(self, type):
+        if type == "health":
+            self.name = "Health Potion"
+        elif type == "mana": self.name = "Mana Potion"
+        elif type == "strength": self.name = "Strength Potion"
+        elif type == "dexterity": self.name = "Dexterity Potion"
+        self.type = type
+        self.description = "Restores 10 health"
+        self.health_restored = 10
 
 class Player:
     def __init__(self, name, hp, weapons, gold=0):
@@ -47,6 +60,7 @@ class Player:
         self.max_strength = self.strength
         self.max_dexterity = self.dexterity
         self.xp = 0
+        self.max_xp = 20  # 20 xp needed for next level
         self.level = 1
 
         self.items = []
@@ -85,7 +99,7 @@ class Game:
         self.player = None
         self.enemies = []
         self.weapons = []
-        self.level_filename = "test.lvl"  # initial level
+        self.level_filename = "1.lvl"  # initial level
         self.level = 1
         self.event_log = []
         self.xp = 0
@@ -167,6 +181,7 @@ class Game:
         Add a message to the message log.
         """
         self.message_log.append(message)
+        logger.debug(f"{message}")
         self.update_message_window()
 
     def calculate_viewport(self):
@@ -214,7 +229,6 @@ class Game:
                             self.grid[new_y][new_x] = '@'
                             self.player_pos = (new_x, new_y)
                             self.game_window.refresh()
-                            # self.add_message("Enemy is in range! Prepare to fight!")
                             monster_adjacent = True
 
                             # Start combat
@@ -234,9 +248,9 @@ class Game:
                                     # Player attacks
                                     attack_damage = random.randint(1, self.player.weapon.damage)
                                     enemy.hp -= attack_damage
-                                    self.add_message(f"{enemy.name} has {enemy.hp} HP remaining (")
                                     self.add_message(
                                         f"You attack {enemy.name} for {attack_damage} damage.")
+                                    self.add_message(f"{enemy.name} down to HP ({enemy.hp}/{enemy.start_hp})")
                                     if self.soundON:
                                         self.enemy_sound.play()
 
@@ -353,6 +367,22 @@ class Game:
                     self.load_level()
                     self.player_pos = self.entry_point
                     move_player = False
+                elif new_cell == 'H':  # health potion
+                    self.add_message("You found a health potion")
+                    # move_player = True
+                    self.player.items.append(self.health_potion)
+                    self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace potion with blank
+                    self.grid[new_y][new_x] = '!'
+                    self.player_pos = [new_x, new_y]
+                    if self.soundON:
+                        self.gold_sound.play()
+                    # insert treasure logic here
+                    increase_hp = random.randint(1, self.player.level * 10)
+                    self.add_message(f"You have restored {increase_hp} health")
+                    self.update()
+                    self.player.hp += increase_hp
+                    if self.player.hp > self.player.max_hp:
+                        self.player.hp = self.player.max_hp
                 elif new_cell == 'X':
                     self.add_message("You found the exit!")
                     self.game_over = True
@@ -517,7 +547,7 @@ class Game:
                         elif cell in ['$', 'G']:
                             self.game_window.addch(y, x, '$', curses.color_pair(4))
                         elif cell in ['T', 'H', 'P']:
-                            self.game_window.addch(y, x, 'T', curses.color_pair(4))
+                            self.game_window.addch(y, x, cell, curses.color_pair(4))
                         else:
                             self.game_window.addch(y, x, cell)
                     except curses.error:
@@ -557,7 +587,8 @@ class Game:
             ("HP", self.player.hp, self.player.max_hp),
             ("Mana", self.player.mana, self.player.max_mana),
             ("Strength", self.player.strength, self.player.max_strength),
-            ("Dexterity", self.player.dexterity, self.player.max_dexterity)
+            ("Dexterity", self.player.dexterity, self.player.max_dexterity),
+            ("XP", self.player.xp, self.player.max_xp)
         ]
         for i, (label, value, max_value) in enumerate(stats):
             if 9 + i < self.legend_window.getmaxyx()[0]:
@@ -600,15 +631,6 @@ class Game:
 
 if __name__ == "__main__":
     logger.debug("Start main")
-
-    # with open('game/enemies.json', 'r') as f:
-    #     enemies = json.load(f)
-    #
-    # for enemy in enemies:
-    #     enemy['exp'] = random.randint(enemy['level'], enemy['level'] * 10)
-    #
-    # with open('game/enemies.json', 'w') as f:
-    #     json.dump(enemies, f, indent=4)
 
     game = Game()
     game.run()

@@ -1,18 +1,42 @@
-2024-09-09 09:29:21,742 Start main
-2024-09-09 09:29:21,742 
+2024-09-09 10:24:33,436 Start main
+2024-09-09 10:24:33,436 
 Create Game
-2024-09-09 09:29:21,743 Loading weapons from 'game/weapons.json'
-2024-09-09 09:29:21,743 Loaded 15 weapons
-2024-09-09 09:29:21,743 Loading enemies from 'game/enemies.json'
-2024-09-09 09:29:21,744 Loaded 28 enemies
-2024-09-09 09:29:21,744 Loading level 1 from levels
-2024-09-09 09:29:21,744 Level data: width=40, height=20, grid size=20x40
-2024-09-09 09:29:21,746 Creating Player New Player with 25 HP and a Rusty Dagger
-2024-09-09 09:29:24,245 new_cell=., dy=-1, dx=0, new_y=1, new_x=2
-2024-09-09 09:29:26,051 new_cell=., dy=0, dx=1, new_y=1, new_x=3
-2024-09-09 09:29:26,789 new_cell=., dy=0, dx=1, new_y=1, new_x=4
-2024-09-09 09:29:26,994 new_cell=., dy=0, dx=1, new_y=1, new_x=5
-2024-09-09 09:29:27,171 new_cell=., dy=0, dx=1, new_y=1, new_x=6
-2024-09-09 09:29:27,607 new_cell=., dy=0, dx=1, new_y=1, new_x=7
-2024-09-09 09:29:28,227 new_cell=., dy=0, dx=1, new_y=1, new_x=8
-2024-09-09 09:29:28,227 Enemy in range!, dy=0, dx=1, new_y=1, new_x=8, y=1, x=9
+2024-09-09 10:24:33,437 Loading weapons from 'game/weapons.json'
+2024-09-09 10:24:33,437 Loaded 15 weapons
+2024-09-09 10:24:33,437 Loading enemies from 'game/enemies.json'
+2024-09-09 10:24:33,438 Loaded 28 enemies
+2024-09-09 10:24:33,438 Loading level 1 from levels
+2024-09-09 10:24:33,438 Loading level 1 from levels
+2024-09-09 10:24:33,438 Level 1 loaded successfully
+2024-09-09 10:24:33,438 Level data: width=40, height=20, grid size=20x40
+2024-09-09 10:24:33,440 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-09 10:24:39,620 new_cell=., dy=0, dx=1, new_y=2, new_x=3
+2024-09-09 10:24:39,620 You moved.
+2024-09-09 10:24:39,741 new_cell=., dy=0, dx=1, new_y=2, new_x=4
+2024-09-09 10:24:39,741 You moved.
+2024-09-09 10:24:39,898 new_cell=., dy=0, dx=1, new_y=2, new_x=5
+2024-09-09 10:24:39,899 You moved.
+2024-09-09 10:24:40,099 new_cell=., dy=0, dx=1, new_y=2, new_x=6
+2024-09-09 10:24:40,099 You moved.
+2024-09-09 10:24:40,301 new_cell=G, dy=1, dx=0, new_y=3, new_x=6
+2024-09-09 10:24:40,303 You have found 26 gold!
+2024-09-09 10:24:40,504 new_cell=., dy=0, dx=1, new_y=3, new_x=7
+2024-09-09 10:24:40,504 You moved.
+2024-09-09 10:24:40,639 new_cell=., dy=0, dx=1, new_y=3, new_x=8
+2024-09-09 10:24:40,639 You moved.
+2024-09-09 10:24:40,800 new_cell=., dy=0, dx=1, new_y=3, new_x=9
+2024-09-09 10:24:40,801 You moved.
+2024-09-09 10:24:40,932 new_cell=., dy=0, dx=1, new_y=3, new_x=10
+2024-09-09 10:24:40,932 You moved.
+2024-09-09 10:24:41,088 new_cell=., dy=0, dx=1, new_y=3, new_x=11
+2024-09-09 10:24:41,088 You moved.
+2024-09-09 10:24:41,225 new_cell=G, dy=0, dx=1, new_y=3, new_x=12
+2024-09-09 10:24:41,225 You have found 7 gold!
+2024-09-09 10:24:41,382 new_cell=., dy=0, dx=1, new_y=3, new_x=13
+2024-09-09 10:24:41,382 You moved.
+2024-09-09 10:24:41,516 new_cell=., dy=0, dx=1, new_y=3, new_x=14
+2024-09-09 10:24:41,517 You moved.
+2024-09-09 10:24:41,811 new_cell=., dy=-1, dx=0, new_y=2, new_x=14
+2024-09-09 10:24:41,811 You moved.
+2024-09-09 10:24:43,251 new_cell=H, dy=-1, dx=0, new_y=1, new_x=14
+2024-09-09 10:24:43,251 You found a health potion

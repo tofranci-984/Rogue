@@ -1,10 +1,18 @@
-2024-09-05 14:35:31,356 Start main
-2024-09-05 14:35:31,356 
+2024-09-09 09:29:21,742 Start main
+2024-09-09 09:29:21,742 
 Create Game
-2024-09-05 14:35:31,359 Loading weapons from 'game/weapons.json'
-2024-09-05 14:35:31,359 Loaded 15 weapons
-2024-09-05 14:35:31,359 Loading enemies from 'game/enemies.json'
-2024-09-05 14:35:31,359 Loaded 28 enemies
-2024-09-05 14:35:31,359 Loading level level_test.lvl from levels
-2024-09-05 14:35:31,359 File level_test.lvl not found
-2024-09-05 14:35:31,359 Failed to load level data
+2024-09-09 09:29:21,743 Loading weapons from 'game/weapons.json'
+2024-09-09 09:29:21,743 Loaded 15 weapons
+2024-09-09 09:29:21,743 Loading enemies from 'game/enemies.json'
+2024-09-09 09:29:21,744 Loaded 28 enemies
+2024-09-09 09:29:21,744 Loading level 1 from levels
+2024-09-09 09:29:21,744 Level data: width=40, height=20, grid size=20x40
+2024-09-09 09:29:21,746 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-09 09:29:24,245 new_cell=., dy=-1, dx=0, new_y=1, new_x=2
+2024-09-09 09:29:26,051 new_cell=., dy=0, dx=1, new_y=1, new_x=3
+2024-09-09 09:29:26,789 new_cell=., dy=0, dx=1, new_y=1, new_x=4
+2024-09-09 09:29:26,994 new_cell=., dy=0, dx=1, new_y=1, new_x=5
+2024-09-09 09:29:27,171 new_cell=., dy=0, dx=1, new_y=1, new_x=6
+2024-09-09 09:29:27,607 new_cell=., dy=0, dx=1, new_y=1, new_x=7
+2024-09-09 09:29:28,227 new_cell=., dy=0, dx=1, new_y=1, new_x=8
+2024-09-09 09:29:28,227 Enemy in range!, dy=0, dx=1, new_y=1, new_x=8, y=1, x=9

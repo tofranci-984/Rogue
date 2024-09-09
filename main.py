@@ -1,12 +1,9 @@
 import curses
 import json
-# import random
 import pickle
 import logging
-import datetime
 import random
 import pygame
-from typing import Tuple
 import os
 
 pygame.init()
@@ -24,7 +21,6 @@ class Weapon:
         self.name = name
         self.damage = damage
         self.attack_range = attack_range
-        # logger.debug(f"Creating weapon '{name}' with damage of {damage}")
 
 
 class Enemy:
@@ -35,7 +31,6 @@ class Enemy:
         self.sense_range = sense_range
         self.level = level
         self.xp = xp
-        # logger.debug(f"Creating enemy {name} with {hp} HP and damage of {damage}")
 
 
 class Player:
@@ -79,34 +74,38 @@ class Game:
             raise ValueError(
                 f"Terminal size must be at least 80x24.  Is currently {self.terminal_width}, {self.terminal_height}")
 
-        # Create separate windows for each section
-        self.game_window = curses.newwin(self.terminal_height - 3, self.terminal_width - 20, 0, 0)
-        self.message_window = curses.newwin(3, self.terminal_width - 21, self.terminal_height - 6, 0)
-        self.message_window.scrollok(True)
-        self.legend_window = curses.newwin(self.terminal_height - 3, 20, 0, self.terminal_width - 20)
-        self.status_window = curses.newwin(3, 20, self.terminal_height - 6, self.terminal_width - 20)
-        # initialize message window
-        self.message_log = []
-
+        # Initialize viewport
+        self.legend_width = 35  # Adjust this value based on your legend's content
+        self.legend_height = 20  # Adjust this value based on your legend's content
+        self.viewport_width = 40
+        self.viewport_height = 20
+        self.viewport_x = 0
+        self.viewport_y = 0
 
         self.player = None
         self.enemies = []
         self.weapons = []
-        self.level = "level_test.lvl"  # initial level
+        self.level_filename = "test.lvl"  # initial level
+        self.level = 1
         self.event_log = []
         self.xp = 0
+        self.message_log = []
+        self.level_height = 40
+        self.level_width = 20
+        self.game_over = False
 
-        # Load weapon and enemy data
-        self.load_weapons()
-        self.load_enemies()
-
-        # Initialize level variables
-        self.level_width = 0
-        self.level_height = 0
         self.grid = []
         self.entry_point = (0, 0)
         self.exit_point = (0, 0)
         self.show_debug_info = True
+
+        message_window_height = 3
+        self.message_window = curses.newwin(3, 40, 20, 0)
+        self.message_window.scrollok(True)
+
+        # Load weapon and enemy data
+        self.load_weapons()
+        self.load_enemies()
 
         # Load level data
         level_data = self.load_level()
@@ -116,6 +115,28 @@ class Game:
         else:
             logger.error("Failed to load level data")
             self.add_message("Error: Failed to load level data")
+
+        # Create separate windows for each section
+        if self.level_width + self.legend_width < self.terminal_width:
+            game_window_width = self.level_width
+        else:
+            game_window_width = 40  # max game window width
+        if self.level_height + self.legend_height < self.terminal_height:
+            game_window_height = self.level_height
+        else:
+            game_window_height = 20  # max game window height
+
+        self.game_window = curses.newwin(game_window_height, game_window_width, 0, 0)
+
+        self.legend_window = curses.newwin(game_window_height, self.legend_width, 0, self.viewport_width + 1)
+
+        if self.viewport_width > self.level_width:
+            self.viewport_width = self.level_width
+        if self.viewport_height > self.level_height:
+            self.viewport_height = self.level_height
+
+        # Calculate viewport
+        self.calculate_viewport()
 
         # Initialize color pairs
         curses.init_pair(1, curses.COLOR_BLUE, curses.COLOR_BLACK)  # Walls
@@ -131,21 +152,12 @@ class Game:
         # self.soundON = True
         self.soundON = False
 
-        # Initialize viewport
-        self.legend_width = 20  # Adjust this value based on your legend's content
-        self.viewport_width = self.terminal_width - self.legend_width - 1  # -1 is for border between legend
-        self.viewport_height = self.terminal_height - 1  # -1 is for the status bar at the bottom
-        self.calculate_viewport()
-
     def update_message_window(self):
         """
         Update the message window with the latest messages.
         """
         self.message_window.erase()
         for i, message in enumerate(self.message_log[-3:]):
-            max_message_length = self.message_window.getmaxyx()[1] - 2  # subtract 2 for padding
-            if len(message) > max_message_length:
-                message = message[:max_message_length] + '...'  # truncate message and add ellipsis
             self.message_window.addstr(i, 0, message)
 
         self.message_window.refresh()
@@ -159,7 +171,7 @@ class Game:
 
     def calculate_viewport(self):
         new_viewport_x = self.player_pos[0] - self.viewport_width // 2
-        new_viewport_y = (self.player_pos[1] + 1)  - self.viewport_height // 2  # + 1 to account for the status bar
+        new_viewport_y = (self.player_pos[1] + 1) - self.viewport_height // 2  # + 1 to account for the status bar
         self.viewport_x = max(0, min(new_viewport_x, self.level_width - self.viewport_width))
         self.viewport_y = max(0, min(new_viewport_y, self.level_height - self.viewport_height))
         # new_viewport_x = self.player_pos[0] - self.viewport_width // 2
@@ -184,6 +196,7 @@ class Game:
     def move_player(self, dy, dx):
         new_y = self.player_pos[1] + dy
         new_x = self.player_pos[0] + dx
+        move_player = True
 
         if 0 <= new_y < self.level_height and 0 <= new_x < self.level_width:
             new_cell = self.grid[new_y][new_x]
@@ -193,13 +206,14 @@ class Game:
             monster_adjacent = False
             for y in range(max(0, new_y - 1), min(self.level_height, new_y + 2)):
                 for x in range(max(0, new_x - 1), min(self.level_width, new_x + 2)):
-                    if self.grid[y][x] == 'E':
+                    if self.grid[y][x] == 'E':  # check for adjacent monsters
                         # player is moving near or on Enemy
                         logger.debug(f"Enemy in range!, dy={dy}, dx={dx}, new_y={new_y}, new_x={new_x}, y={y}, x={x}")
-                        if (new_cell != 'E'):  # prevent being in same cell as enemy
+                        if new_cell != 'E':  # prevent being in same cell as enemy
                             self.grid[self.player_pos[1]][self.player_pos[0]] = '.'
                             self.grid[new_y][new_x] = '@'
                             self.player_pos = (new_x, new_y)
+                            self.game_window.refresh()
                             # self.add_message("Enemy is in range! Prepare to fight!")
                             monster_adjacent = True
 
@@ -211,54 +225,64 @@ class Game:
                                 # Handle the case where there are no enemies at or below the player's level
                                 # For example, you could add a message to the player or choose an enemy at a higher level
                                 logger.debug(f"No enemies at or below your level!: LVL={self.player.level}")
-                                enemy = random.choice(self.enemies)
+                                enemy = random.choice(self.enemies)  # Choose a random enemy
                             while self.player.hp > 0 and enemy.hp > 0:
-                                self.add_message(f"You are in combat with a {enemy.name}!")
-                                # action = input("Do you want to (A)ttack or (F)lee? ")
-                                action = 'A'
-                                if action.upper() == "A":
+                                self.add_message(f"You are in range of a {enemy.name}!")
+                                self.add_message("Do you want to (A)ttack or (F)lee? ")
+                                key = self.screen.getch()
+                                if key == ord('a'):
                                     # Player attacks
                                     attack_damage = random.randint(1, self.player.weapon.damage)
                                     enemy.hp -= attack_damage
+                                    self.add_message(f"{enemy.name} has {enemy.hp} HP remaining (")
                                     self.add_message(
-                                        f"You attack {enemy.name} for {attack_damage} damage.  {enemy.name} has {enemy.hp} HP remaining.")
-                                    if self.soundON: self.enemy_sound.play()
+                                        f"You attack {enemy.name} for {attack_damage} damage.")
+                                    if self.soundON:
+                                        self.enemy_sound.play()
 
                                     if enemy.hp <= 0:
-                                        self.add_message(f"\nYou defeated {enemy.name}!")
+                                        self.add_message(f"You defeated the {enemy.name}!")
                                         self.enemies.remove(enemy)
+                                        self.grid[y][x] = '.'  # clear the enemy cell
+                                        self.game_window.refresh()
+                                        self.add_message(f"You gained {enemy.xp} XP!")
                                         self.player.xp += enemy.xp
                                         break
 
                                     # Enemy attacks
                                     attack_damage = random.randint(1, enemy.damage)
                                     self.player.hp -= attack_damage
-                                    self.add_message(f"{enemy.name} attacks you for {attack_damage} damage.  ")
+                                    self.add_message(f"{enemy.name} attacks you for {attack_damage} damage.")
+                                    self.update()  # Update the game window, legend window, and message window
+                                    if self.soundON:
+                                        self.enemy_sound.play()
 
                                     if self.player.hp <= 0:
                                         self.add_message(f"You have been defeated by the {enemy.name}!")
                                         self.game_over = True
                                         break
-
-                                elif action.upper() == "F":
+                                elif key == ord('f'):
                                     # Player flees
                                     self.add_message("You attempt to flee!")
-                                    direction = input(
+                                    self.add_message(
                                         "Which direction do you want to move? (N)orth, (S)outh, (E)ast, (W)est? ")
-                                    if direction.upper() == "N":
+                                    self.screen.refresh()
+                                    key = self.screen.getch()
+                                    if key == ord("n"):
                                         new_y = self.player_pos[1] - 1
                                         new_x = self.player_pos[0]
-                                    elif direction.upper() == "S":
+                                    elif key == ord("s"):
                                         new_y = self.player_pos[1] + 1
                                         new_x = self.player_pos[0]
-                                    elif direction.upper() == "E":
+                                    elif key == ord("e"):
                                         new_y = self.player_pos[1]
                                         new_x = self.player_pos[0] + 1
-                                    elif direction.upper() == "W":
+                                    elif key == ord("w"):
                                         new_y = self.player_pos[1]
                                         new_x = self.player_pos[0] - 1
                                     else:
                                         self.add_message("Invalid direction!")
+                                        self.screen.refresh()
                                         continue
 
                                     # Check if the new position is within the grid
@@ -289,25 +313,46 @@ class Game:
                     self.add_message("You moved.")
                 elif new_cell == '#':  # wall
                     self.add_message("You bumped into a wall.")
-                elif new_cell == 'G':
+                    move_player = False
+                elif new_cell == '$' or new_cell == 'G':  # gold
                     self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace gold with blank
                     self.grid[new_y][new_x] = '!'
                     self.player_pos = [new_x, new_y]
-                    self.add_message ("You have found treasure!")
-                    self.gold_sound.play()
+                    if self.soundON:
+                        self.gold_sound.play()
                     # insert treasure logic here
-                    self.player.gold += random.randint(1, 100)
+                    new_gold = random.randint(1, 100)
+                    self.add_message(f"You have found {new_gold} gold!")
+                    self.player.gold += new_gold
                 elif new_cell == '^':  # trap
                     self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace trap with blank
                     self.grid[new_y][new_x] = '!'
                     self.player_pos = [new_x, new_y]
-                    hp = random.randint(1, int(self.player.hp / 3))
+                    if self.player.hp > 0:
+                        hp = random.randint(1, int(self.player.hp / 3))
+                    else:
+                        hp = 0
                     self.player.hp -= hp
-                    self.add_message (f"You have triggered a trap! You suffered {hp} damage!")
-                    self.enemy_sound.play()
+                    self.add_message(f"You have triggered a trap! You suffered {hp} damage!")
+                    if self.soundON:
+                        self.enemy_sound.play()
                     if self.player.hp <= 0:  # should never happen as we choose hp from 1 to hp / 3
-                        self.add_message ("You have been defeated by the trap!")
+                        self.add_message("You have been defeated by the trap!")
                         self.game_over = True
+                elif new_cell == '>':  # stairs down
+                    self.add_message("You found stairs going down")
+                    self.level += 1
+                    self.level_filename = f"{self.level}.lvl"
+                    self.load_level()
+                    self.player_pos = self.entry_point
+                    move_player = False
+                elif new_cell == '<':  # stairs up
+                    self.add_message("You found stairs going up")
+                    self.level -= 1
+                    self.level_filename = f"{self.level}.lvl"
+                    self.load_level()
+                    self.player_pos = self.entry_point
+                    move_player = False
                 elif new_cell == 'X':
                     self.add_message("You found the exit!")
                     self.game_over = True
@@ -315,8 +360,9 @@ class Game:
                 else:
                     logger.debug(f"Unknown object encountered {new_cell} at new_y:{new_y}, new_x:{new_x}")
                     self.add_message(f"You encountered an unknown object: {new_cell}")
+                    move_player = False
 
-            if self.player_pos != (new_x, new_y):  # Only update if the player actually moved
+            if self.player_pos != (new_x, new_y) and move_player:  # Only update if the player actually moved
                 self.player_pos = [new_x, new_y]
                 self.calculate_viewport()  # Update viewport after moving player
 
@@ -342,7 +388,9 @@ class Game:
         pass
 
     def load_level(self):
-        filename = f"levels/{self.level}"
+        filename = f"levels/{self.level_filename}"
+        if not filename.endswith('.lvl'):
+            filename += '.lvl'
         path, filename = os.path.split(filename)
         logger.debug(f"Loading level {self.level} from {path}")
         self.add_message(f"Loading level {self.level} from {path}")
@@ -369,26 +417,6 @@ class Game:
             self.add_message(f"Error: Failed to load level {self.level}")
         return None
 
-    def update_game_state(self):
-        # Move monster towards player if within 5 cells
-        player_x, player_y = self.player_pos
-        for enemy in self.enemies:
-            if enemy.symbol == 'M':
-                monster_x, monster_y = enemy.pos
-                if abs(player_x - monster_x) <= 5 and abs(player_y - monster_y) <= 5:
-                    dx = player_x - monster_x
-                    dy = player_y - monster_y
-                    if abs(dx) > abs(dy):
-                        if dx > 0:
-                            enemy.pos = (monster_x + 1, monster_y)
-                        else:
-                            enemy.pos = (monster_x - 1, monster_y)
-                    else:
-                        if dy > 0:
-                            enemy.pos = (monster_x, monster_y + 1)
-                        else:
-                            enemy.pos = (monster_x, monster_y - 1)
-
 
     def save_game(self):
         logger.debug("save_game()")
@@ -399,7 +427,6 @@ class Game:
         logger.debug("load_game()")
         with open('savegame.pkl', 'rb') as f:
             self.player, self.enemies, self.level = pickle.load(f)
-
 
     def handle_input(self):
         key = self.screen.getch()
@@ -421,26 +448,59 @@ class Game:
             self.increase_volume()
         elif key == ord('-'):
             self.decrease_volume()
+        elif key == ord('1'):
+            self.view_message_log()
         elif key == ord('S'):  # Shift-D (capital S in curses)
             self.show_debug_info = not self.show_debug_info
             self.add_message("Debug info toggled")
 
         return True
 
+    def view_message_log(self):
+        self.screen.clear()
+        max_y, max_x = self.screen.getmaxyx()
+        messages = self.message_log[:]
+        offset = 0
+        while True:
+            self.screen.clear()
+            for i, message in enumerate(messages[offset:offset + max_y - 1]):
+                self.screen.addnstr(i, 0, message, max_x - 1)
+            self.screen.addnstr(max_y - 1, 0, "Press 'q' to exit, 'j' to scroll down, 'k' to scroll up", max_x - 1)
+            self.screen.refresh()
+            key = self.screen.getch()
+            if key == ord('q'):
+                self.screen.clear()
+                self.screen.refresh()
+                break
+            elif key == ord('j'):
+                if offset + max_y - 1 < len(messages):
+                    offset += 1
+            elif key == ord('k'):
+                if offset > 0:
+                    offset -= 1
+
     def update(self):
         # Calculate available space for legend
         available_width = self.terminal_width - self.legend_width
         legend_start_x = min(self.level_width, available_width - self.legend_width)
 
+
         # Clear all windows
         self.game_window.erase()
+        self.game_window.bkgd(" ", curses.color_pair(3))
+        self.game_window.refresh()
         self.message_window.erase()
+        self.message_window.bkgd(" ", curses.color_pair(2))
+        self.message_window.refresh()
         self.legend_window.erase()
-        self.status_window.erase()
+        self.legend_window.bkgd(" ", curses.color_pair(1))
+        self.legend_window.refresh()
+        # self.status_window.erase()
 
         # Print the visible portion of the level
         for y in range(self.viewport_height):
             for x in range(self.viewport_width):
+                # self.game_window.refresh()
                 level_y = y + self.viewport_y
                 level_x = x + self.viewport_x
                 if 0 <= level_y < self.level_height and 0 <= level_x < self.level_width:
@@ -454,19 +514,22 @@ class Game:
                             self.game_window.addch(y, x, cell, curses.color_pair(3))
                         elif cell in ['@']:
                             self.game_window.addch(y, x, cell, curses.color_pair(5))
-                        elif cell in ['$']:
+                        elif cell in ['$', 'G']:
                             self.game_window.addch(y, x, '$', curses.color_pair(4))
-                        elif cell in ['T']:
+                        elif cell in ['T', 'H', 'P']:
                             self.game_window.addch(y, x, 'T', curses.color_pair(4))
                         else:
                             self.game_window.addch(y, x, cell)
                     except curses.error:
                         pass
 
-        # Draw border between level and legend
-        for y in range(self.viewport_height):
-            if y < self.game_window.getmaxyx()[0] and self.viewport_width < self.game_window.getmaxyx()[1]:
-                self.game_window.addch(y, self.viewport_width -1, '|')
+        self.game_window.refresh()
+
+        # Draw column separator
+        self.screen.vline(0, self.viewport_width, curses.ACS_VLINE, self.viewport_height)
+        self.screen.refresh()
+        self.game_window.refresh()
+        self.screen.refresh()
 
         # Print the legend
         if self.show_debug_info:
@@ -477,15 +540,17 @@ class Game:
         self.legend_window.addstr(1, 0, "Legend:")
         legend_entries = [
             ("#", "Wall", 1),
-            ("S/X", "Start/Exit", 2),
-            ("E", "Monster", 3),
+            ("X", "Start/Exit", 2),
+            ("</>", "Stairs up / down", 2),
+            ("E", "Enemy", 3),
             ("@", "Player", 5),
-            (f"{self.player.gold}", "Gold", 4)
         ]
         for i, (symbol, description, color) in enumerate(legend_entries):
             if 2 + i < self.viewport_height:
                 self.legend_window.addstr(2 + i, 0, symbol, curses.color_pair(color))
-                self.legend_window.addstr(2 + i, 2, f"- {description}"[:self.legend_width - 2])
+                self.legend_window.addstr(2 + i, 3, f"- {description}"[:self.legend_width - 2])
+
+        self.legend_window.refresh()
 
         # Display player stats
         stats = [
@@ -499,9 +564,12 @@ class Game:
                 color = 2 if value >= max_value * 0.25 else 3
                 stat_str = f"{value}/{max_value} - {label}"
                 self.legend_window.addstr(9 + i, 0, stat_str, curses.color_pair(color))
+
+        gold = f"{self.player.gold} - Gold"
+        self.legend_window.addstr(14, 0, gold, curses.color_pair(4))
         self.legend_window.refresh()
 
-        # Display the message
+        # Display the messages
         for i, message in enumerate(self.message_log[-3:]):
             self.message_window.addstr(i, 0, message)
 
@@ -509,8 +577,7 @@ class Game:
         self.game_window.refresh()
         self.message_window.refresh()
         self.legend_window.refresh()
-        self.status_window.refresh()
-
+        # self.status_window.refresh()
 
     def render(self):
         # Render game state

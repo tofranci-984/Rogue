@@ -25,7 +25,6 @@ class Weapon:
         self.damage = damage
         self.attack_range = attack_range
 
-
 class Enemy:
     def __init__(self, name, hp, damage, sense_range, level, xp):
         self.name = name
@@ -36,7 +35,6 @@ class Enemy:
         self.sense_range = sense_range
         self.level = level
         self.xp = xp
-
 
 class Potion:
     def __init__(self, type):
@@ -123,6 +121,8 @@ class Game:
         message_window_height = 3
         self.message_window = curses.newwin(4, 40, 20, 0)
         self.message_window.scrollok(True)
+        self.message_window.bkgd(" ", curses.color_pair(2))
+
         self.messages = []
 
         # Load weapon and enemy data
@@ -149,8 +149,10 @@ class Game:
             game_window_height = 20  # max game window height
 
         self.game_window = curses.newwin(game_window_height, game_window_width, 0, 0)
+        self.game_window.bkgd(" ", curses.color_pair(3))
 
         self.legend_window = curses.newwin(self.terminal_height, self.legend_width, 0, self.viewport_width + 1)
+        self.legend_window.bkgd(" ", curses.color_pair(1))
         # self.legend_window = curses.newwin(game_window_height, self.legend_width, 0, self.viewport_width + 1)
 
         if self.viewport_width > self.level_width:
@@ -205,42 +207,28 @@ class Game:
                 # result += "[" + part
         return result, attrs
 
-    # def update_message_window(self, message_window_height=4):
-    #     """
-    #     Update the message window with the latest messages.
-    #     """
-    #     max_y, max_x = self.message_window.getmaxyx()
-    #     if max_y < message_window_height:
-    #         message_window_height = max_y
-    #     self.message_window.erase()
-    #     for i, message in enumerate(self.message_log[-message_window_height:]):
-    #         # Parse the message and apply the markup
-    #         formatted_message = self.parse_message(message)
-    #         self.message_window.addstr(i, 0, formatted_message)
-    #     self.message_window.refresh()
-
     def update_message_window(self, message_window_height=4):
         max_width = self.message_window.getmaxyx()[1]
         lines = []
-        current_line = ""
+        message_window_height -= 1  # Subtract 1 for the title line
         for message in self.message_log[-message_window_height:]:
             formatted_message, attrs = self.parse_message(message)
             words = formatted_message.split()
+            current_line = ""
             for word in words:
                 if len(current_line + " " + word) > max_width:
-                    lines.append(current_line.strip())
+                    lines.append((current_line.strip(), attrs))
                     current_line = word
                 else:
                     current_line += " " + word
             if current_line:
-                lines.append(current_line.strip())
-                current_line = ""
+                lines.append((current_line.strip(), attrs))
 
         self.message_window.erase()
-        for i, line in enumerate(lines):
+        self.message_window.clear()
+        for i, (line, attrs) in enumerate(lines):
             self.message_window.addstr(i, 0, line, attrs)
         self.message_window.refresh()
-
 
     def add_message(self, message, message_window_height=4):
         """
@@ -320,7 +308,10 @@ class Game:
                             while self.player.hp > 0 and enemy.hp > 0:
                                 self.add_message(f"You are in range of a {enemy.name}!", 20)
                                 self.add_message("Do you want to (A)ttack or (F)lee? ", 20)
-                                key = self.screen.getch()
+                                key = -1
+                                while key == -1:
+                                    key = self.screen.getch()
+
                                 self.update()
 
                                 if key == ord('a'):
@@ -576,7 +567,13 @@ class Game:
             self.player, self.enemies, self.level = pickle.load(f)
 
     def handle_input(self):
-        key = self.screen.getch()
+
+        self.screen.nodelay(True)  # do not block and wait for input
+        curses.noecho()
+        key = -1
+        while key == -1:
+            key = self.screen.getch()
+
         if key == ord('q'):
             return False
         elif key == ord('s'):
@@ -633,43 +630,72 @@ class Game:
             self.increase_volume()
         elif key == ord('-'):
             self.decrease_volume()
+        elif key == ord('u'):
+            self.legend_window.refresh()
+            self.update()
         elif key == ord('1'):
             self.view_message_log()
         elif key == ord('2'):
             self.legend_window.erase()
             self.legend_window.refresh()
-            self.show_inventory()
+            # self.show_inventory()
+            self.change_weapon()
         elif key == ord('S'):  # Shift-D (capital S in curses)
             self.show_debug_info = not self.show_debug_info
             self.add_message("Debug info toggled")
 
+        self.screen.nodelay(False)  # turn off nodelay / non-blocking input
+        curses.echo()
         return True
 
     def show_inventory(self):
         # max_y, max_x = self.screen.getmaxyx()
         self.legend_window.erase()
+        self.legend_window.bkgd(" ", curses.color_pair(1))
+        self.legend_window.refresh()
+
         self.legend_window.addstr(0, 0, "Inventory:")
         self.legend_window.refresh()
         for i, item in enumerate(self.player.items):
             if isinstance(item, Weapon):
-                self.legend_window.addstr(i + 1, 0, f"- {item.name} (Damage: {item.damage})")
+                self.legend_window.addstr(i + 1, 0, f"{i+1} {item.name} (Damage: {item.damage})", curses.color_pair(2))
             elif isinstance(item, Potion):
                 if item.name == "Health Potion":
-                    self.legend_window.addstr(i + 1, 0, f"- {item.name} (Restores: {item.health_restored} HP)")
+                    self.legend_window.addstr(i + 1, 0, f"{i+1} {item.name} (Restores: {item.health_restored} HP)", curses.color_pair(4))
                 elif item.name == "Mana Potion":
-                    self.legend_window.addstr(i + 1, 0, f"- {item.name} (Restores: {item.mana_restored} MP)")
+                    self.legend_window.addstr(i + 1, 0, f"{i+1} {item.name} (Restores: {item.mana_restored} MP)", curses.color_pair(1))
                 elif item.name == "Strength Potion":
-                    self.legend_window.addstr(i + 1, 0, f"- {item.name} (Increases: {item.strength_increase}%)")
+                    self.legend_window.addstr(i + 1, 0, f"{i+1} {item.name} (Increases: {item.strength_increase}%)", curses.color_pair(3))
             else:
-                self.legend_window.addstr(i + 1, 0, f"- {item.name}")
-        self.legend_window.refresh()
+                self.legend_window.addstr(i + 1, 0, f"{i+1} {item.name}")
+            self.legend_window.refresh()
         max_y, max_x = self.legend_window.getmaxyx()
-        self.legend_window.addnstr(max_y - 5, 0, "Press any key to exit", max_x - 1)
+        self.legend_window.addnstr(19, 0, "Weapon #, (d)rop or (q)uit", max_x - 1)
         self.legend_window.refresh()
+        curses.noecho()
         key = self.screen.getch()
-        self.legend_window.clear()
-        self.legend_window.refresh()
-        self.screen.refresh()
+        curses.echo()
+
+    def change_weapon(self):
+        # Display the inventory and allow  the player to select an weapon
+        self.add_message(f"Changing to new weapon")
+        self.show_inventory()
+        selection = self.screen.getch()  # flush out existing char
+
+        selection = -1
+        curses.noecho()
+
+        while selection == -1:
+            selection = self.screen.getch()
+        curses.echo()
+
+        selection = selection - 49  # 48 = ord('0')
+        if 0 <= selection < len(self.player.items) and isinstance(self.player.items[selection], Weapon):
+            self.player.weapon = self.player.items[selection]
+            self.add_message(f"Changed weapon to {self.player.weapon.name}")
+        else:
+            self.add_message("Invalid selection {selection}  Must be a Weapon")
+
 
     def view_message_log(self):
         self.screen.clear()
@@ -703,13 +729,13 @@ class Game:
 
         # Clear all windows
         self.game_window.erase()
-        self.game_window.bkgd(" ", curses.color_pair(3))
+        # self.game_window.bkgd("g", curses.color_pair(3))
         self.game_window.refresh()
         self.message_window.erase()
-        self.message_window.bkgd(" ", curses.color_pair(2))
+        # self.message_window.bkgd("m", curses.color_pair(2))
         self.message_window.refresh()
         self.legend_window.erase()
-        self.legend_window.bkgd(" ", curses.color_pair(1))
+        # self.legend_window.bkgd("x", curses.color_pair(1))
         self.legend_window.refresh()
 
         # Print the visible portion of the level
@@ -764,6 +790,8 @@ class Game:
                 self.legend_window.addstr(2 + i, 0, symbol, curses.color_pair(color))
                 self.legend_window.addstr(2 + i, 3, f"- {description}"[:self.legend_width - 2])
 
+        self.legend_window.addstr(7, 0, f"Weapon: {self.player.weapon.name} ({self.player.weapon.damage} damage)", curses.color_pair(4))
+
         self.legend_window.refresh()
 
         # Display player stats
@@ -789,17 +817,17 @@ class Game:
         for i, item in enumerate(self.player.items):
             if 16 + i < self.legend_window.getmaxyx()[0]:
                 if isinstance(item, Weapon):
-                    self.legend_window.addstr(17 + i, 0, f"- {item.name} (Damage: {item.damage})")
+                    self.legend_window.addstr(17 + i, 0, f"{i+1}: {item.name} (Damage: {item.damage})")
                 elif isinstance(item, Potion):
                     if hasattr(item, 'health_restored'):
-                        self.legend_window.addstr(16 + i, 0, f"- {item.name} (Restores: {item.health_restored} HP)")
+                        self.legend_window.addstr(17 + i, 0, f"{i+1}: {item.name} (Restores: {item.health_restored} HP)",curses.color_pair(3))
                     elif hasattr(item, 'mana_restored'):
-                        self.legend_window.addstr(16 + i, 0, f"- {item.name} (Restores: {item.mana_restored} MP)")
+                        self.legend_window.addstr(17 + i, 0, f"{i+1}: {item.name} (Restores: {item.mana_restored} MP)")
                     elif hasattr(item, 'strength_increase'):
-                        self.legend_window.addstr(16 + i, 0,
-                              f"- {item.name} (Increases strength by {item.strength_increase}%)")
+                        self.legend_window.addstr(17 + i, 0,
+                              f"{i+1}: {item.name} (Increases strength by {item.strength_increase}%)")
                 else:
-                    self.legend_window.addstr(16 + i, 0, f"- {item.name}")
+                    self.legend_window.addstr(16 + i, 0, f"{i+1}: {item.name}")
 
         # Display the messages
         for i, message in enumerate(self.message_log[-4:]):

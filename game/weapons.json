@@ -1,7 +1,7 @@
 [
   {
     "name": "Rusty Dagger",
-    "damage": 3,
+    "damage": 2,
     "attack_range": 1
   },
   {
@@ -21,7 +21,7 @@
   },
   {
     "name": "War Hammer",
-    "damage": 8,
+    "damage": 10,
     "attack_range": 1
   },
   {

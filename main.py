@@ -363,10 +363,24 @@ class Game:
                 self.player_pos = [new_x, new_y]
                 if self.soundON:
                     self.gold_sound.play()
-                # insert treasure logic here
                 new_gold = random.randint(1, 100)
                 self.add_message(f"You have found {new_gold} gold!")
                 self.player.gold += new_gold
+            elif new_cell == 'T':  # gold
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace treasure with blank
+                self.grid[new_y][new_x] = '!'
+                self.player_pos = [new_x, new_y]
+                if self.soundON:
+                    self.gold_sound.play()
+                # what kind of treasure?
+                new_gold = random.randint(self.player.level * 10, 100 + self.player.level * 10)
+                self.add_message(f"You have found {new_gold} gold!")
+                self.player.gold += new_gold
+                if random.randint(1, 1) == 1:  # 1/10 chance of getting a weapon
+                    weapon_name = random.choice([weapon.name for weapon in self.weapons])
+                    weapon_damage = random.randint(1, 5)
+                    self.player.items.append(Weapon(weapon_name, weapon_damage, 1))  # assuming attack_range is 1
+                    self.add_message(f"You found a {self.player.items[-1].name}!")
             elif new_cell == '^':  # trap
                 self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace trap with blank
                 self.grid[new_y][new_x] = '!'
@@ -421,7 +435,6 @@ class Game:
                     self.player_pos = [new_x, new_y]
                     if self.soundON:
                         self.gold_sound.play()
-
                 else:
                     self.add_message("You found a mana potion")
                     self.player.items.append(Potion("mana"))
@@ -430,6 +443,10 @@ class Game:
                     self.player_pos = [new_x, new_y]
                     if self.soundON:
                         self.gold_sound.play()
+            elif new_cell == '+':  # door
+                self.grid[self.player_pos[1]][self.player_pos[0]] = '.'  # replace door with blank
+                self.grid[new_y][new_x] = '!'
+                self.player_pos = [new_x, new_y]
             elif new_cell == 'X':
                 self.add_message("You found the exit!")
                 self.game_over = True
@@ -715,11 +732,11 @@ class Game:
         self.legend_window.refresh()
 
         # Display player inventory
-        self.legend_window.addstr(15, 0, "Inventory:")
+        self.legend_window.addstr(16, 0, "Inventory:")
         for i, item in enumerate(self.player.items):
             if 16 + i < self.legend_window.getmaxyx()[0]:
                 if isinstance(item, Weapon):
-                    self.legend_window.addstr(16 + i, 0, f"- {item.name} (Damage: {item.damage})")
+                    self.legend_window.addstr(17 + i, 0, f"- {item.name} (Damage: {item.damage})")
                 elif isinstance(item, Potion):
                     if hasattr(item, 'health_restored'):
                         self.legend_window.addstr(16 + i, 0, f"- {item.name} (Restores: {item.health_restored} HP)")

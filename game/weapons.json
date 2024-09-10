@@ -25,21 +25,6 @@
     "attack_range": 1
   },
   {
-    "name": "Shortbow",
-    "damage": 4,
-    "attack_range": 5
-  },
-  {
-    "name": "Longbow",
-    "damage": 6,
-    "attack_range": 8
-  },
-  {
-    "name": "Crossbow",
-    "damage": 7,
-    "attack_range": 6
-  },
-  {
     "name": "Throwing Knife",
     "damage": 3,
     "attack_range": 3
@@ -58,11 +43,6 @@
     "name": "Mace",
     "damage": 7,
     "attack_range": 1
-  },
-  {
-    "name": "Sling",
-    "damage": 3,
-    "attack_range": 4
   },
   {
     "name": "Magic Wand",

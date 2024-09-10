@@ -1,154 +1,126 @@
-2024-09-10 07:49:32,467 Start main
-2024-09-10 07:49:32,467 
+2024-09-10 12:22:42,130 Start main
+2024-09-10 12:22:42,131 
 Create Game
-2024-09-10 07:49:32,471 Loading weapons from 'game/weapons.json'
-2024-09-10 07:49:32,471 Loaded 11 weapons
-2024-09-10 07:49:32,471 Loading enemies from 'game/enemies.json'
-2024-09-10 07:49:32,472 Loaded 30 enemies
-2024-09-10 07:49:32,472 Loading level 1 from levels
-2024-09-10 07:49:32,472 Level 1 loaded successfully
-2024-09-10 07:49:32,472 Level data: width=40, height=20, grid size=20x40
-2024-09-10 07:49:32,476 Game initialized
-2024-09-10 07:49:32,476 Creating Player New Player with 25 HP and a Rusty Dagger
-2024-09-10 07:49:33,186 new_cell=., dy=0, dx=1, new_y=2, new_x=3
-2024-09-10 07:49:33,186 You moved.
-2024-09-10 07:49:33,342 new_cell=., dy=0, dx=1, new_y=2, new_x=4
-2024-09-10 07:49:33,342 You moved.
-2024-09-10 07:49:34,175 new_cell=., dy=0, dx=-1, new_y=2, new_x=3
-2024-09-10 07:49:34,175 You moved.
-2024-09-10 07:49:34,333 new_cell=., dy=0, dx=-1, new_y=2, new_x=2
-2024-09-10 07:49:34,334 You moved.
-2024-09-10 07:49:34,600 new_cell=., dy=1, dx=0, new_y=3, new_x=2
-2024-09-10 07:49:34,601 You moved.
-2024-09-10 07:49:34,802 new_cell=., dy=1, dx=0, new_y=4, new_x=2
-2024-09-10 07:49:34,802 You moved.
-2024-09-10 07:49:35,186 new_cell=., dy=0, dx=-1, new_y=4, new_x=1
-2024-09-10 07:49:35,186 You moved.
-2024-09-10 07:49:36,240 new_cell=T, dy=1, dx=0, new_y=5, new_x=1
-2024-09-10 07:49:36,241 You have found 57 gold!
-2024-09-10 07:49:36,241 You found a Magic Wand!
-2024-09-10 07:49:43,132 new_cell=., dy=1, dx=0, new_y=6, new_x=1
-2024-09-10 07:49:43,133 You moved.
-2024-09-10 07:49:43,623 new_cell=., dy=1, dx=0, new_y=7, new_x=1
-2024-09-10 07:49:43,623 You moved.
-2024-09-10 07:49:44,254 new_cell=P, dy=0, dx=1, new_y=7, new_x=2
-2024-09-10 07:49:44,254 You found a mana potion
-2024-09-10 07:49:46,457 new_cell=., dy=0, dx=1, new_y=7, new_x=3
-2024-09-10 07:49:46,458 You moved.
-2024-09-10 07:49:46,749 new_cell=., dy=0, dx=1, new_y=7, new_x=4
-2024-09-10 07:49:46,749 You moved.
-2024-09-10 07:49:47,136 new_cell=., dy=1, dx=0, new_y=8, new_x=4
-2024-09-10 07:49:47,137 You moved.
-2024-09-10 07:49:47,357 new_cell=H, dy=1, dx=0, new_y=9, new_x=4
-2024-09-10 07:49:47,357 You found a health potion
-2024-09-10 07:49:49,003 new_cell=., dy=0, dx=1, new_y=9, new_x=5
-2024-09-10 07:49:49,003 You moved.
-2024-09-10 07:49:49,294 new_cell=., dy=0, dx=1, new_y=9, new_x=6
-2024-09-10 07:49:49,294 You moved.
-2024-09-10 07:49:51,430 new_cell=., dy=0, dx=1, new_y=9, new_x=7
-2024-09-10 07:49:51,431 You moved.
-2024-09-10 07:49:51,726 new_cell=., dy=0, dx=1, new_y=9, new_x=8
-2024-09-10 07:49:51,727 You moved.
-2024-09-10 07:49:52,259 new_cell=., dy=0, dx=1, new_y=9, new_x=9
-2024-09-10 07:49:52,259 You moved.
-2024-09-10 07:49:52,916 new_cell=+, dy=1, dx=0, new_y=10, new_x=9
-2024-09-10 07:49:54,169 new_cell=., dy=1, dx=0, new_y=11, new_x=9
-2024-09-10 07:49:54,170 You moved.
-2024-09-10 07:49:55,794 new_cell=G, dy=1, dx=0, new_y=12, new_x=9
-2024-09-10 07:49:55,794 Enemy in range!, dy=1, dx=0, new_y=12, new_x=9, y=13, x=10
-2024-09-10 07:49:55,794 You are in range of a Rabid Badger!
-2024-09-10 07:49:55,795 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:01,644 You attack Rabid Badger for 1 damage.
-2024-09-10 07:50:01,645 Rabid Badger HP (9/10)
-2024-09-10 07:50:01,645 Rabid Badger attacks you for 1 damage.
-2024-09-10 07:50:01,645 You are in range of a Rabid Badger!
-2024-09-10 07:50:01,645 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:07,339 You are in range of a Rabid Badger!
-2024-09-10 07:50:07,341 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:07,838 You are in range of a Rabid Badger!
-2024-09-10 07:50:07,839 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:07,922 You are in range of a Rabid Badger!
-2024-09-10 07:50:07,922 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:08,007 You are in range of a Rabid Badger!
-2024-09-10 07:50:08,007 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:08,090 You are in range of a Rabid Badger!
-2024-09-10 07:50:08,090 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:08,173 You are in range of a Rabid Badger!
-2024-09-10 07:50:08,174 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:08,259 You are in range of a Rabid Badger!
-2024-09-10 07:50:08,260 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:08,338 You are in range of a Rabid Badger!
-2024-09-10 07:50:08,338 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:08,419 You are in range of a Rabid Badger!
-2024-09-10 07:50:08,419 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:09,294 You attack Rabid Badger for 2 damage.
-2024-09-10 07:50:09,294 Rabid Badger HP (7/10)
-2024-09-10 07:50:09,294 Rabid Badger attacks you for 1 damage.
-2024-09-10 07:50:09,295 You are in range of a Rabid Badger!
-2024-09-10 07:50:09,295 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:10,351 You attack Rabid Badger for 3 damage.
-2024-09-10 07:50:10,351 Rabid Badger HP (4/10)
-2024-09-10 07:50:10,351 Rabid Badger attacks you for 2 damage.
-2024-09-10 07:50:10,352 You are in range of a Rabid Badger!
-2024-09-10 07:50:10,352 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:11,072 You attack Rabid Badger for 1 damage.
-2024-09-10 07:50:11,072 Rabid Badger HP (3/10)
-2024-09-10 07:50:11,073 Rabid Badger attacks you for 1 damage.
-2024-09-10 07:50:11,073 You are in range of a Rabid Badger!
-2024-09-10 07:50:11,073 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:17,937 You attack Rabid Badger for 2 damage.
-2024-09-10 07:50:17,939 Rabid Badger HP (1/10)
-2024-09-10 07:50:17,940 Rabid Badger attacks you for 2 damage.
-2024-09-10 07:50:17,940 You are in range of a Rabid Badger!
-2024-09-10 07:50:17,941 Do you want to (A)ttack or (F)lee? 
-2024-09-10 07:50:19,497 You attack Rabid Badger for 3 damage.
-2024-09-10 07:50:19,498 Rabid Badger HP (-2/10)
-2024-09-10 07:50:19,498 You defeated the Rabid Badger!
-2024-09-10 07:50:19,499 You gained 3 XP!
-2024-09-10 07:50:28,134 new_cell=G, dy=0, dx=-1, new_y=12, new_x=8
-2024-09-10 07:50:28,134 You have found 60 gold!
-2024-09-10 07:50:28,873 new_cell=G, dy=0, dx=-1, new_y=12, new_x=7
-2024-09-10 07:50:28,874 You have found 4 gold!
-2024-09-10 07:50:29,322 new_cell=., dy=0, dx=1, new_y=12, new_x=8
-2024-09-10 07:50:29,322 You moved.
-2024-09-10 07:50:29,507 new_cell=., dy=0, dx=1, new_y=12, new_x=9
-2024-09-10 07:50:29,507 You moved.
-2024-09-10 07:50:29,662 new_cell=G, dy=0, dx=1, new_y=12, new_x=10
-2024-09-10 07:50:29,663 You have found 16 gold!
-2024-09-10 07:50:29,817 new_cell=G, dy=0, dx=1, new_y=12, new_x=11
-2024-09-10 07:50:29,817 You have found 51 gold!
-2024-09-10 07:50:29,976 new_cell=G, dy=0, dx=1, new_y=12, new_x=12
-2024-09-10 07:50:29,976 You have found 47 gold!
-2024-09-10 07:50:30,156 new_cell=., dy=0, dx=1, new_y=12, new_x=13
-2024-09-10 07:50:30,157 You moved.
-2024-09-10 07:50:31,031 new_cell=., dy=0, dx=-1, new_y=12, new_x=12
-2024-09-10 07:50:31,032 You moved.
-2024-09-10 07:50:31,260 new_cell=., dy=0, dx=-1, new_y=12, new_x=11
-2024-09-10 07:50:31,260 You moved.
-2024-09-10 07:50:31,440 new_cell=., dy=0, dx=-1, new_y=12, new_x=10
-2024-09-10 07:50:31,440 You moved.
-2024-09-10 07:50:31,620 new_cell=., dy=0, dx=-1, new_y=12, new_x=9
-2024-09-10 07:50:31,621 You moved.
-2024-09-10 07:50:32,384 new_cell=., dy=1, dx=0, new_y=13, new_x=9
-2024-09-10 07:50:32,384 You moved.
-2024-09-10 07:50:32,607 new_cell=#, dy=1, dx=0, new_y=14, new_x=9
-2024-09-10 07:50:32,608 You bumped into a wall.
-2024-09-10 07:50:32,787 new_cell=#, dy=1, dx=0, new_y=14, new_x=9
-2024-09-10 07:50:32,787 You bumped into a wall.
-2024-09-10 07:50:33,059 new_cell=., dy=-1, dx=0, new_y=12, new_x=9
-2024-09-10 07:50:33,059 You moved.
-2024-09-10 07:50:33,260 new_cell=., dy=-1, dx=0, new_y=11, new_x=9
-2024-09-10 07:50:33,260 You moved.
-2024-09-10 07:50:33,416 new_cell=., dy=-1, dx=0, new_y=10, new_x=9
-2024-09-10 07:50:33,417 You moved.
-2024-09-10 07:50:33,577 new_cell=., dy=-1, dx=0, new_y=9, new_x=9
-2024-09-10 07:50:33,577 You moved.
-2024-09-10 07:50:34,184 new_cell=., dy=0, dx=1, new_y=9, new_x=10
-2024-09-10 07:50:34,185 You moved.
-2024-09-10 07:50:34,361 new_cell=., dy=0, dx=1, new_y=9, new_x=11
-2024-09-10 07:50:34,362 You moved.
-2024-09-10 07:50:35,668 new_cell=T, dy=0, dx=1, new_y=9, new_x=12
-2024-09-10 07:50:35,668 You have found 81 gold!
-2024-09-10 07:50:35,668 You found a Rusty Dagger!
-2024-09-10 07:50:40,172 new_cell=., dy=0, dx=1, new_y=9, new_x=13
-2024-09-10 07:50:40,176 You moved.
+2024-09-10 12:22:42,134 Loading weapons from 'game/weapons.json'
+2024-09-10 12:22:42,134 Loaded 11 weapons
+2024-09-10 12:22:42,134 Loading enemies from 'game/enemies.json'
+2024-09-10 12:22:42,134 Loaded 30 enemies
+2024-09-10 12:22:42,135 Loading level 1 from levels
+2024-09-10 12:22:42,135 Level 1 loaded successfully
+2024-09-10 12:22:42,135 Level data: width=40, height=20, grid size=20x40
+2024-09-10 12:22:42,138 Game initialized
+2024-09-10 12:22:42,138 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-10 12:22:43,950 new_cell=., dy=1, dx=0, new_y=3, new_x=2
+2024-09-10 12:22:43,950 You moved.
+2024-09-10 12:22:44,373 new_cell=., dy=0, dx=1, new_y=3, new_x=3
+2024-09-10 12:22:44,373 You moved.
+2024-09-10 12:22:44,873 new_cell=., dy=0, dx=1, new_y=3, new_x=4
+2024-09-10 12:22:44,873 You moved.
+2024-09-10 12:22:44,953 new_cell=., dy=0, dx=1, new_y=3, new_x=5
+2024-09-10 12:22:44,954 You moved.
+2024-09-10 12:22:45,037 new_cell=G, dy=0, dx=1, new_y=3, new_x=6
+2024-09-10 12:22:45,037 You have found 28 gold!
+2024-09-10 12:22:45,130 new_cell=., dy=0, dx=1, new_y=3, new_x=7
+2024-09-10 12:22:45,130 You moved.
+2024-09-10 12:22:45,204 new_cell=., dy=0, dx=1, new_y=3, new_x=8
+2024-09-10 12:22:45,204 You moved.
+2024-09-10 12:22:45,288 new_cell=., dy=0, dx=1, new_y=3, new_x=9
+2024-09-10 12:22:45,289 You moved.
+2024-09-10 12:22:45,372 new_cell=., dy=0, dx=1, new_y=3, new_x=10
+2024-09-10 12:22:45,373 You moved.
+2024-09-10 12:22:45,456 new_cell=., dy=0, dx=1, new_y=3, new_x=11
+2024-09-10 12:22:45,456 You moved.
+2024-09-10 12:22:45,539 new_cell=G, dy=0, dx=1, new_y=3, new_x=12
+2024-09-10 12:22:45,540 You have found 25 gold!
+2024-09-10 12:22:45,621 new_cell=., dy=0, dx=1, new_y=3, new_x=13
+2024-09-10 12:22:45,621 You moved.
+2024-09-10 12:22:45,704 new_cell=., dy=0, dx=1, new_y=3, new_x=14
+2024-09-10 12:22:45,704 You moved.
+2024-09-10 12:22:45,789 new_cell=., dy=0, dx=1, new_y=3, new_x=15
+2024-09-10 12:22:45,789 You moved.
+2024-09-10 12:22:45,869 new_cell=., dy=0, dx=1, new_y=3, new_x=16
+2024-09-10 12:22:45,869 You moved.
+2024-09-10 12:22:45,954 new_cell=., dy=0, dx=1, new_y=3, new_x=17
+2024-09-10 12:22:45,955 You moved.
+2024-09-10 12:22:46,039 new_cell=G, dy=0, dx=1, new_y=3, new_x=18
+2024-09-10 12:22:46,040 You have found 38 gold!
+2024-09-10 12:22:46,121 new_cell=., dy=0, dx=1, new_y=3, new_x=19
+2024-09-10 12:22:46,121 You moved.
+2024-09-10 12:22:46,202 new_cell=., dy=0, dx=1, new_y=3, new_x=20
+2024-09-10 12:22:46,202 You moved.
+2024-09-10 12:22:46,289 new_cell=., dy=0, dx=1, new_y=3, new_x=21
+2024-09-10 12:22:46,289 You moved.
+2024-09-10 12:22:46,372 new_cell=., dy=0, dx=1, new_y=3, new_x=22
+2024-09-10 12:22:46,372 You moved.
+2024-09-10 12:22:46,460 new_cell=., dy=0, dx=1, new_y=3, new_x=23
+2024-09-10 12:22:46,460 You moved.
+2024-09-10 12:22:46,537 new_cell=., dy=0, dx=1, new_y=3, new_x=24
+2024-09-10 12:22:46,538 You moved.
+2024-09-10 12:22:46,621 new_cell=M, dy=0, dx=1, new_y=3, new_x=25
+2024-09-10 12:22:46,622 You found a mana potion
+2024-09-10 12:22:46,702 new_cell=., dy=0, dx=1, new_y=3, new_x=26
+2024-09-10 12:22:46,702 You moved.
+2024-09-10 12:22:46,803 new_cell=., dy=-1, dx=0, new_y=2, new_x=26
+2024-09-10 12:22:46,803 You moved.
+2024-09-10 12:22:47,004 new_cell=., dy=-1, dx=0, new_y=1, new_x=26
+2024-09-10 12:22:47,005 You moved.
+2024-09-10 12:22:47,162 new_cell=#, dy=-1, dx=0, new_y=0, new_x=26
+2024-09-10 12:22:47,163 You bumped into a wall.
+2024-09-10 12:22:47,273 new_cell=., dy=0, dx=-1, new_y=1, new_x=25
+2024-09-10 12:22:47,273 You moved.
+2024-09-10 12:22:47,772 new_cell=., dy=0, dx=-1, new_y=1, new_x=24
+2024-09-10 12:22:47,772 You moved.
+2024-09-10 12:22:47,858 new_cell=., dy=0, dx=-1, new_y=1, new_x=23
+2024-09-10 12:22:47,858 You moved.
+2024-09-10 12:22:47,941 new_cell=., dy=0, dx=-1, new_y=1, new_x=22
+2024-09-10 12:22:47,942 You moved.
+2024-09-10 12:22:48,026 new_cell=H, dy=0, dx=-1, new_y=1, new_x=21
+2024-09-10 12:22:48,026 You found a health potion
+2024-09-10 12:22:48,108 new_cell=., dy=0, dx=-1, new_y=1, new_x=20
+2024-09-10 12:22:48,108 You moved.
+2024-09-10 12:22:48,191 new_cell=., dy=0, dx=-1, new_y=1, new_x=19
+2024-09-10 12:22:48,191 You moved.
+2024-09-10 12:22:48,276 new_cell=., dy=0, dx=-1, new_y=1, new_x=18
+2024-09-10 12:22:48,277 You moved.
+2024-09-10 12:22:48,359 new_cell=., dy=0, dx=-1, new_y=1, new_x=17
+2024-09-10 12:22:48,360 You moved.
+2024-09-10 12:22:48,442 new_cell=., dy=0, dx=-1, new_y=1, new_x=16
+2024-09-10 12:22:48,443 You moved.
+2024-09-10 12:22:48,528 new_cell=., dy=0, dx=-1, new_y=1, new_x=15
+2024-09-10 12:22:48,528 You moved.
+2024-09-10 12:22:48,611 new_cell=H, dy=0, dx=-1, new_y=1, new_x=14
+2024-09-10 12:22:48,612 You found a health potion
+2024-09-10 12:22:48,692 new_cell=., dy=0, dx=-1, new_y=1, new_x=13
+2024-09-10 12:22:48,693 You moved.
+2024-09-10 12:22:48,775 new_cell=., dy=0, dx=-1, new_y=1, new_x=12
+2024-09-10 12:22:48,775 You moved.
+2024-09-10 12:22:48,859 new_cell=., dy=0, dx=-1, new_y=1, new_x=11
+2024-09-10 12:22:48,859 You moved.
+2024-09-10 12:22:49,432 new_cell=., dy=0, dx=-1, new_y=1, new_x=10
+2024-09-10 12:22:49,432 Enemy in range!, dy=0, dx=-1, new_y=1, new_x=10, y=1, x=9
+2024-09-10 12:22:49,433 You are in range of a Stray Dog!
+2024-09-10 12:22:49,433 Do you want to (A)ttack or (F)lee? 
+2024-09-10 12:22:51,232 You attack Stray Dog for [red]3[/red] damage.
+2024-09-10 12:22:51,232 Stray Dog HP (7/10)
+2024-09-10 12:22:51,233 Stray Dog attacks you for [red]1[/red] damage.
+2024-09-10 12:22:51,233 You are in range of a Stray Dog!
+2024-09-10 12:22:51,234 Do you want to (A)ttack or (F)lee? 
+2024-09-10 12:22:54,898 You attack Stray Dog for [red]3[/red] damage.
+2024-09-10 12:22:54,899 Stray Dog HP (4/10)
+2024-09-10 12:22:54,899 Stray Dog attacks you for [red]1[/red] damage.
+2024-09-10 12:22:54,899 You are in range of a Stray Dog!
+2024-09-10 12:22:54,900 Do you want to (A)ttack or (F)lee? 
+2024-09-10 12:22:57,038 You attack Stray Dog for [red]1[/red] damage.
+2024-09-10 12:22:57,039 Stray Dog HP (3/10)
+2024-09-10 12:22:57,039 Stray Dog attacks you for [red]1[/red] damage.
+2024-09-10 12:22:57,040 You are in range of a Stray Dog!
+2024-09-10 12:22:57,040 Do you want to (A)ttack or (F)lee? 
+2024-09-10 12:23:07,005 You attack Stray Dog for [red]1[/red] damage.
+2024-09-10 12:23:07,006 Stray Dog HP (2/10)
+2024-09-10 12:23:07,007 Stray Dog attacks you for [red]1[/red] damage.
+2024-09-10 12:23:07,007 You are in range of a Stray Dog!
+2024-09-10 12:23:07,008 Do you want to (A)ttack or (F)lee? 
+2024-09-10 12:23:14,297 You attack Stray Dog for [red]3[/red] damage.
+2024-09-10 12:23:14,298 Stray Dog HP (-1/10)
+2024-09-10 12:23:14,298 You defeated the Stray Dog!
+2024-09-10 12:23:14,299 You gained 2 XP!

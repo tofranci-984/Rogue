@@ -5,6 +5,9 @@ import logging
 import random
 import pygame
 import os
+from rich import print
+from rich.console import Console
+from rich.text import Text
 
 pygame.init()
 pygame.mixer.init()
@@ -120,6 +123,7 @@ class Game:
         message_window_height = 3
         self.message_window = curses.newwin(4, 40, 20, 0)
         self.message_window.scrollok(True)
+        self.messages = []
 
         # Load weapon and enemy data
         self.load_weapons()
@@ -172,19 +176,69 @@ class Game:
         self.soundON = False
         self.add_message("Game initialized")
 
+    import curses
+
+    def parse_message(self, message):
+        result = ""
+        attrs = 0
+        for part in message.split("["):
+            if part.startswith("b]"):
+                attrs |= curses.A_BOLD
+                result += part[2:]
+            elif part.startswith("/b]"):
+                attrs &= ~curses.A_BOLD
+                result += part[3:]
+            elif part.startswith("red]"):
+                attrs |= curses.COLOR_RED
+                result += part[4:]
+            elif part.startswith("/red]"):
+                attrs &= ~curses.COLOR_RED
+                result += part[5:]
+            elif part.startswith("u]"):
+                attrs |= curses.A_UNDERLINE
+                result += part[2:]
+            elif part.startswith("/u]"):
+                attrs &= ~curses.A_UNDERLINE
+                result += part[3:]
+            else:
+                result += part
+                # result += "[" + part
+        return result, attrs
+
+    # def update_message_window(self, message_window_height=4):
+    #     """
+    #     Update the message window with the latest messages.
+    #     """
+    #     max_y, max_x = self.message_window.getmaxyx()
+    #     if max_y < message_window_height:
+    #         message_window_height = max_y
+    #     self.message_window.erase()
+    #     for i, message in enumerate(self.message_log[-message_window_height:]):
+    #         # Parse the message and apply the markup
+    #         formatted_message = self.parse_message(message)
+    #         self.message_window.addstr(i, 0, formatted_message)
+    #     self.message_window.refresh()
+
     def update_message_window(self, message_window_height=4):
-        """
-        Update the message window with the latest messages.
-        """
-        max_y = self.message_window.getmaxyx()[0]
-        if max_y < message_window_height:
-            message_window_height = max_y
-        message_count = len(self.message_log)
+        max_width = self.message_window.getmaxyx()[1]
+        lines = []
+        current_line = ""
+        for message in self.message_log[-message_window_height:]:
+            formatted_message, attrs = self.parse_message(message)
+            words = formatted_message.split()
+            for word in words:
+                if len(current_line + " " + word) > max_width:
+                    lines.append(current_line.strip())
+                    current_line = word
+                else:
+                    current_line += " " + word
+            if current_line:
+                lines.append(current_line.strip())
+                current_line = ""
+
         self.message_window.erase()
-        for i, message in enumerate(self.message_log[-message_window_height:]):
-            # if i < self.message_window.getmaxyx()[0] and len(message) < self.message_window.getmaxyx()[1]:
-            if i <= max_y and len(message) < self.message_window.getmaxyx()[1]:
-                self.message_window.addstr(i, 0, message)
+        for i, line in enumerate(lines):
+            self.message_window.addstr(i, 0, line, attrs)
         self.message_window.refresh()
 
 
@@ -194,6 +248,7 @@ class Game:
         """
         self.message_log.append(message)
         logger.debug(f"{message}")
+        self.message_window.erase()
         self.update_message_window(message_window_height)
 
     def calculate_viewport(self):
@@ -258,23 +313,22 @@ class Game:
                             self.message_window.refresh()
 
                             # Expand message log for combat
-                            self.message_window.resize(self.viewport_height - 5, self.viewport_width)
+                            self.message_window.resize(self.viewport_height, self.viewport_width)
                             self.message_window.mvwin(0, 0)
                             self.message_window.refresh()
-
-                            self.game_window.erase()
-                            self.game_window.refresh()
 
                             while self.player.hp > 0 and enemy.hp > 0:
                                 self.add_message(f"You are in range of a {enemy.name}!", 20)
                                 self.add_message("Do you want to (A)ttack or (F)lee? ", 20)
                                 key = self.screen.getch()
+                                self.update()
+
                                 if key == ord('a'):
                                     # Player attacks
                                     attack_damage = random.randint(1, self.player.weapon.damage)
                                     enemy.hp -= attack_damage
                                     self.add_message(
-                                        f"You attack {enemy.name} for {attack_damage} damage.", 20)
+                                        f"You attack {enemy.name} for [red]{attack_damage}[/red] damage.", 20)
                                     self.add_message(f"{enemy.name} HP ({enemy.hp}/{enemy.start_hp})", 20)
                                     if self.soundON:
                                         self.enemy_sound.play()
@@ -296,8 +350,7 @@ class Game:
                                     # Enemy attacks
                                     attack_damage = random.randint(1, enemy.damage)
                                     self.player.hp -= attack_damage
-                                    self.add_message(f"{enemy.name} attacks you for {attack_damage} damage.", 20)
-
+                                    self.add_message(f"{enemy.name} attacks you for [red]{attack_damage}[/red] damage.", 20)
 
                                     # self.update()  # Update the game window, legend window, and message window
                                     if self.soundON:

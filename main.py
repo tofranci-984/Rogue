@@ -236,7 +236,7 @@ class Game:
         """
         self.message_log.append(message)
         logger.debug(f"{message}")
-        self.message_window.erase()
+        self.message_window.clear()
         self.update_message_window(message_window_height)
 
     def calculate_viewport(self):
@@ -335,13 +335,13 @@ class Game:
                                         self.message_window.resize(4, 40)
                                         self.message_window.mvwin(20, 0)
                                         self.message_window.refresh()
-
                                         break
 
                                     # Enemy attacks
                                     attack_damage = random.randint(1, enemy.damage)
                                     self.player.hp -= attack_damage
                                     self.add_message(f"{enemy.name} attacks you for [red]{attack_damage}[/red] damage.", 20)
+                                    self.legend_window.refresh()  # Refresh the legend window for HP updates
 
                                     # self.update()  # Update the game window, legend window, and message window
                                     if self.soundON:
@@ -357,7 +357,9 @@ class Game:
                                     self.add_message(
                                         "Which direction do you want to move? (N)orth, (S)outh, (E)ast, (W)est? ", 20)
                                     self.screen.refresh()
-                                    key = self.screen.getch()
+                                    key = -1
+                                    while key == -1:
+                                        key = self.screen.getch()
                                     if key == ord("n"):
                                         new_y = self.player_pos[1] - 1
                                         new_x = self.player_pos[0]
@@ -386,8 +388,9 @@ class Game:
                                         self.add_message("You cannot move that way!", 20)
                                         continue
 
-                                # break
+                                break
                             if monster_adjacent:
+                                self.update_message_window(20)
                                 break
 
         if not monster_adjacent:
@@ -567,7 +570,6 @@ class Game:
             self.player, self.enemies, self.level = pickle.load(f)
 
     def handle_input(self):
-
         self.screen.nodelay(True)  # do not block and wait for input
         curses.noecho()
         key = -1
@@ -735,6 +737,7 @@ class Game:
         # self.message_window.bkgd("m", curses.color_pair(2))
         self.message_window.refresh()
         self.legend_window.erase()
+        self.legend_window.clear()
         # self.legend_window.bkgd("x", curses.color_pair(1))
         self.legend_window.refresh()
 

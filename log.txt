@@ -1,215 +1,26 @@
-2024-09-10 17:07:02,310 Start main
-2024-09-10 17:07:02,311 
+2024-09-10 17:31:14,148 Start main
+2024-09-10 17:31:14,149 
 Create Game
-2024-09-10 17:07:02,311 Loading weapons from 'game/weapons.json'
-2024-09-10 17:07:02,311 Loaded 11 weapons
-2024-09-10 17:07:02,311 Loading enemies from 'game/enemies.json'
-2024-09-10 17:07:02,312 Loaded 30 enemies
-2024-09-10 17:07:02,312 Loading level 1 from levels
-2024-09-10 17:07:02,312 Level 1 loaded successfully
-2024-09-10 17:07:02,312 Level data: width=40, height=20, grid size=20x40
-2024-09-10 17:07:02,315 Game initialized
-2024-09-10 17:07:02,315 Creating Player New Player with 25 HP and a Rusty Dagger
-2024-09-10 17:07:04,309 new_cell=., dy=0, dx=1, new_y=2, new_x=3
-2024-09-10 17:07:04,309 You moved.
-2024-09-10 17:07:04,554 new_cell=., dy=0, dx=1, new_y=2, new_x=4
-2024-09-10 17:07:04,554 You moved.
-2024-09-10 17:07:04,783 new_cell=., dy=0, dx=1, new_y=2, new_x=5
-2024-09-10 17:07:04,783 You moved.
-2024-09-10 17:07:05,252 new_cell=., dy=0, dx=1, new_y=2, new_x=6
-2024-09-10 17:07:05,252 You moved.
-2024-09-10 17:07:05,611 new_cell=G, dy=1, dx=0, new_y=3, new_x=6
-2024-09-10 17:07:05,611 You have found 97 gold!
-2024-09-10 17:07:06,311 new_cell=., dy=0, dx=1, new_y=3, new_x=7
-2024-09-10 17:07:06,311 You moved.
-2024-09-10 17:07:06,496 new_cell=., dy=0, dx=1, new_y=3, new_x=8
-2024-09-10 17:07:06,496 You moved.
-2024-09-10 17:07:06,671 new_cell=., dy=0, dx=1, new_y=3, new_x=9
-2024-09-10 17:07:06,671 You moved.
-2024-09-10 17:07:06,827 new_cell=., dy=0, dx=1, new_y=3, new_x=10
-2024-09-10 17:07:06,827 You moved.
-2024-09-10 17:07:07,006 new_cell=., dy=0, dx=1, new_y=3, new_x=11
-2024-09-10 17:07:07,006 You moved.
-2024-09-10 17:07:07,096 new_cell=G, dy=0, dx=1, new_y=3, new_x=12
-2024-09-10 17:07:07,096 You have found 26 gold!
-2024-09-10 17:07:07,257 new_cell=., dy=0, dx=1, new_y=3, new_x=13
-2024-09-10 17:07:07,257 You moved.
-2024-09-10 17:07:07,843 new_cell=., dy=-1, dx=0, new_y=2, new_x=13
-2024-09-10 17:07:07,843 You moved.
-2024-09-10 17:07:08,020 new_cell=., dy=-1, dx=0, new_y=1, new_x=13
-2024-09-10 17:07:08,020 You moved.
-2024-09-10 17:07:08,538 new_cell=H, dy=0, dx=1, new_y=1, new_x=14
-2024-09-10 17:07:08,538 You found a health potion
-2024-09-10 17:07:08,740 new_cell=., dy=0, dx=1, new_y=1, new_x=15
-2024-09-10 17:07:08,741 You moved.
-2024-09-10 17:07:09,241 new_cell=., dy=0, dx=1, new_y=1, new_x=16
-2024-09-10 17:07:09,241 You moved.
-2024-09-10 17:07:09,324 new_cell=., dy=0, dx=1, new_y=1, new_x=17
-2024-09-10 17:07:09,324 You moved.
-2024-09-10 17:07:09,408 new_cell=., dy=0, dx=1, new_y=1, new_x=18
-2024-09-10 17:07:09,408 You moved.
-2024-09-10 17:07:09,492 new_cell=., dy=0, dx=1, new_y=1, new_x=19
-2024-09-10 17:07:09,492 You moved.
-2024-09-10 17:07:09,576 new_cell=., dy=0, dx=1, new_y=1, new_x=20
-2024-09-10 17:07:09,576 You moved.
-2024-09-10 17:07:09,659 new_cell=H, dy=0, dx=1, new_y=1, new_x=21
-2024-09-10 17:07:09,659 You found a health potion
-2024-09-10 17:07:09,743 new_cell=., dy=0, dx=1, new_y=1, new_x=22
-2024-09-10 17:07:09,743 You moved.
-2024-09-10 17:07:09,826 new_cell=., dy=0, dx=1, new_y=1, new_x=23
-2024-09-10 17:07:09,826 You moved.
-2024-09-10 17:07:09,909 new_cell=., dy=0, dx=1, new_y=1, new_x=24
-2024-09-10 17:07:09,909 You moved.
-2024-09-10 17:07:09,994 new_cell=., dy=0, dx=1, new_y=1, new_x=25
-2024-09-10 17:07:09,995 You moved.
-2024-09-10 17:07:10,076 new_cell=., dy=0, dx=1, new_y=1, new_x=26
-2024-09-10 17:07:10,076 You moved.
-2024-09-10 17:07:10,160 new_cell=., dy=0, dx=1, new_y=1, new_x=27
-2024-09-10 17:07:10,160 You moved.
-2024-09-10 17:07:10,244 new_cell=., dy=0, dx=1, new_y=1, new_x=28
-2024-09-10 17:07:10,244 You moved.
-2024-09-10 17:07:10,328 new_cell=., dy=0, dx=1, new_y=1, new_x=29
-2024-09-10 17:07:10,328 You moved.
-2024-09-10 17:07:10,766 new_cell=., dy=1, dx=0, new_y=2, new_x=29
-2024-09-10 17:07:10,766 You moved.
-2024-09-10 17:07:11,349 new_cell=., dy=0, dx=-1, new_y=2, new_x=28
-2024-09-10 17:07:11,349 You moved.
-2024-09-10 17:07:11,552 new_cell=., dy=0, dx=-1, new_y=2, new_x=27
-2024-09-10 17:07:11,552 You moved.
-2024-09-10 17:07:11,733 new_cell=., dy=1, dx=0, new_y=3, new_x=27
-2024-09-10 17:07:11,733 You moved.
-2024-09-10 17:07:11,980 new_cell=., dy=0, dx=-1, new_y=3, new_x=26
-2024-09-10 17:07:11,980 You moved.
-2024-09-10 17:07:12,159 new_cell=M, dy=0, dx=-1, new_y=3, new_x=25
-2024-09-10 17:07:12,159 You found a mana potion
-2024-09-10 17:07:12,363 new_cell=., dy=0, dx=-1, new_y=3, new_x=24
-2024-09-10 17:07:12,363 You moved.
-2024-09-10 17:07:12,520 new_cell=., dy=0, dx=-1, new_y=3, new_x=23
-2024-09-10 17:07:12,520 You moved.
-2024-09-10 17:07:12,708 new_cell=., dy=0, dx=-1, new_y=3, new_x=22
-2024-09-10 17:07:12,708 You moved.
-2024-09-10 17:07:12,857 new_cell=., dy=0, dx=-1, new_y=3, new_x=21
-2024-09-10 17:07:12,857 You moved.
-2024-09-10 17:07:13,039 new_cell=., dy=0, dx=-1, new_y=3, new_x=20
-2024-09-10 17:07:13,039 You moved.
-2024-09-10 17:07:13,197 new_cell=., dy=0, dx=-1, new_y=3, new_x=19
-2024-09-10 17:07:13,197 You moved.
-2024-09-10 17:07:13,376 new_cell=G, dy=0, dx=-1, new_y=3, new_x=18
-2024-09-10 17:07:13,376 You have found 75 gold!
-2024-09-10 17:07:13,982 new_cell=., dy=0, dx=-1, new_y=3, new_x=17
-2024-09-10 17:07:13,982 You moved.
-2024-09-10 17:07:14,483 new_cell=., dy=0, dx=-1, new_y=3, new_x=16
-2024-09-10 17:07:14,483 You moved.
-2024-09-10 17:07:14,566 new_cell=., dy=0, dx=-1, new_y=3, new_x=15
-2024-09-10 17:07:14,567 You moved.
-2024-09-10 17:07:14,649 new_cell=., dy=0, dx=-1, new_y=3, new_x=14
-2024-09-10 17:07:14,650 You moved.
-2024-09-10 17:07:14,733 new_cell=., dy=0, dx=-1, new_y=3, new_x=13
-2024-09-10 17:07:14,733 You moved.
-2024-09-10 17:07:14,817 new_cell=., dy=0, dx=-1, new_y=3, new_x=12
-2024-09-10 17:07:14,817 You moved.
-2024-09-10 17:07:14,900 new_cell=., dy=0, dx=-1, new_y=3, new_x=11
-2024-09-10 17:07:14,900 You moved.
-2024-09-10 17:07:14,983 new_cell=., dy=0, dx=-1, new_y=3, new_x=10
-2024-09-10 17:07:14,983 You moved.
-2024-09-10 17:07:15,079 new_cell=., dy=0, dx=-1, new_y=3, new_x=9
-2024-09-10 17:07:15,079 You moved.
-2024-09-10 17:07:15,151 new_cell=., dy=0, dx=-1, new_y=3, new_x=8
-2024-09-10 17:07:15,151 You moved.
-2024-09-10 17:07:15,234 new_cell=., dy=0, dx=-1, new_y=3, new_x=7
-2024-09-10 17:07:15,234 You moved.
-2024-09-10 17:07:15,317 new_cell=., dy=0, dx=-1, new_y=3, new_x=6
-2024-09-10 17:07:15,317 You moved.
-2024-09-10 17:07:15,401 new_cell=., dy=0, dx=-1, new_y=3, new_x=5
-2024-09-10 17:07:15,401 You moved.
-2024-09-10 17:07:15,486 new_cell=., dy=0, dx=-1, new_y=3, new_x=4
-2024-09-10 17:07:15,486 You moved.
-2024-09-10 17:07:15,570 new_cell=., dy=0, dx=-1, new_y=3, new_x=3
-2024-09-10 17:07:15,570 You moved.
-2024-09-10 17:07:15,654 new_cell=., dy=0, dx=-1, new_y=3, new_x=2
-2024-09-10 17:07:15,654 You moved.
-2024-09-10 17:07:15,737 new_cell=., dy=0, dx=-1, new_y=3, new_x=1
-2024-09-10 17:07:15,737 You moved.
-2024-09-10 17:07:15,759 new_cell=., dy=1, dx=0, new_y=4, new_x=1
-2024-09-10 17:07:15,759 You moved.
-2024-09-10 17:07:16,322 new_cell=T, dy=1, dx=0, new_y=5, new_x=1
-2024-09-10 17:07:16,322 You have found 92 gold!
-2024-09-10 17:07:16,322 You found a Staff!
-2024-09-10 17:07:16,525 new_cell=., dy=1, dx=0, new_y=6, new_x=1
-2024-09-10 17:07:16,525 You moved.
-2024-09-10 17:07:16,751 new_cell=., dy=1, dx=0, new_y=7, new_x=1
-2024-09-10 17:07:16,751 You moved.
-2024-09-10 17:07:16,908 new_cell=P, dy=0, dx=1, new_y=7, new_x=2
-2024-09-10 17:07:16,908 You found a mana potion
-2024-09-10 17:07:17,155 new_cell=., dy=1, dx=0, new_y=8, new_x=2
-2024-09-10 17:07:17,155 You moved.
-2024-09-10 17:07:17,381 new_cell=., dy=1, dx=0, new_y=9, new_x=2
-2024-09-10 17:07:17,381 You moved.
-2024-09-10 17:07:17,518 new_cell=., dy=0, dx=1, new_y=9, new_x=3
-2024-09-10 17:07:17,518 You moved.
-2024-09-10 17:07:18,019 new_cell=H, dy=0, dx=1, new_y=9, new_x=4
-2024-09-10 17:07:18,019 You found a health potion
-2024-09-10 17:07:18,101 new_cell=., dy=0, dx=1, new_y=9, new_x=5
-2024-09-10 17:07:18,101 You moved.
-2024-09-10 17:07:18,186 new_cell=., dy=0, dx=1, new_y=9, new_x=6
-2024-09-10 17:07:18,186 You moved.
-2024-09-10 17:07:18,269 new_cell=., dy=0, dx=1, new_y=9, new_x=7
-2024-09-10 17:07:18,269 You moved.
-2024-09-10 17:07:18,353 new_cell=., dy=0, dx=1, new_y=9, new_x=8
-2024-09-10 17:07:18,353 You moved.
-2024-09-10 17:07:18,437 new_cell=., dy=0, dx=1, new_y=9, new_x=9
-2024-09-10 17:07:18,437 You moved.
-2024-09-10 17:07:18,521 new_cell=., dy=0, dx=1, new_y=9, new_x=10
-2024-09-10 17:07:18,521 You moved.
-2024-09-10 17:07:18,605 new_cell=., dy=0, dx=1, new_y=9, new_x=11
-2024-09-10 17:07:18,605 You moved.
-2024-09-10 17:07:18,695 new_cell=T, dy=0, dx=1, new_y=9, new_x=12
-2024-09-10 17:07:18,695 You have found 26 gold!
-2024-09-10 17:07:18,695 You found a Long Sword!
-2024-09-10 17:07:18,774 new_cell=., dy=0, dx=1, new_y=9, new_x=13
-2024-09-10 17:07:18,774 You moved.
-2024-09-10 17:07:18,860 new_cell=., dy=0, dx=1, new_y=9, new_x=14
-2024-09-10 17:07:18,860 You moved.
-2024-09-10 17:07:18,941 new_cell=., dy=0, dx=1, new_y=9, new_x=15
-2024-09-10 17:07:18,941 You moved.
-2024-09-10 17:07:18,978 new_cell=., dy=0, dx=1, new_y=9, new_x=16
-2024-09-10 17:07:18,978 You moved.
-2024-09-10 17:07:19,203 new_cell=., dy=1, dx=0, new_y=10, new_x=16
-2024-09-10 17:07:19,203 You moved.
-2024-09-10 17:07:19,704 new_cell=., dy=1, dx=0, new_y=11, new_x=16
-2024-09-10 17:07:19,704 You moved.
-2024-09-10 17:07:19,790 new_cell=., dy=1, dx=0, new_y=12, new_x=16
-2024-09-10 17:07:19,790 You moved.
-2024-09-10 17:07:19,871 new_cell=., dy=1, dx=0, new_y=13, new_x=16
-2024-09-10 17:07:19,871 You moved.
-2024-09-10 17:07:19,954 new_cell=., dy=1, dx=0, new_y=14, new_x=16
-2024-09-10 17:07:19,954 You moved.
-2024-09-10 17:07:20,038 new_cell=., dy=1, dx=0, new_y=15, new_x=16
-2024-09-10 17:07:20,038 You moved.
-2024-09-10 17:07:20,122 new_cell=., dy=1, dx=0, new_y=16, new_x=16
-2024-09-10 17:07:20,122 You moved.
-2024-09-10 17:07:20,193 new_cell=., dy=0, dx=-1, new_y=16, new_x=15
-2024-09-10 17:07:20,193 You moved.
-2024-09-10 17:07:20,778 new_cell=., dy=0, dx=-1, new_y=16, new_x=14
-2024-09-10 17:07:20,778 You moved.
-2024-09-10 17:07:21,050 new_cell=., dy=0, dx=-1, new_y=16, new_x=13
-2024-09-10 17:07:21,050 You moved.
-2024-09-10 17:07:21,161 new_cell=., dy=0, dx=-1, new_y=16, new_x=12
-2024-09-10 17:07:21,161 You moved.
-2024-09-10 17:07:21,317 new_cell=., dy=0, dx=-1, new_y=16, new_x=11
-2024-09-10 17:07:21,317 You moved.
-2024-09-10 17:07:21,475 new_cell=., dy=0, dx=-1, new_y=16, new_x=10
-2024-09-10 17:07:21,475 You moved.
-2024-09-10 17:07:21,587 new_cell=., dy=0, dx=-1, new_y=16, new_x=9
-2024-09-10 17:07:21,587 You moved.
-2024-09-10 17:07:21,974 new_cell=T, dy=1, dx=0, new_y=17, new_x=9
-2024-09-10 17:07:21,974 You have found 92 gold!
-2024-09-10 17:07:21,975 You found a Spear!
-2024-09-10 17:07:23,615 new_cell=., dy=0, dx=1, new_y=17, new_x=10
-2024-09-10 17:07:23,615 You moved.
-2024-09-10 17:07:24,198 new_cell=., dy=0, dx=1, new_y=17, new_x=11
-2024-09-10 17:07:24,198 You moved.
-2024-09-10 17:07:24,425 new_cell=., dy=0, dx=1, new_y=17, new_x=12
-2024-09-10 17:07:24,426 You moved.
-2024-09-10 17:07:24,806 new_cell=., dy=0, dx=1, new_y=17, new_x=13
-2024-09-10 17:07:24,806 You moved.
+2024-09-10 17:31:14,150 Loading weapons from 'game/weapons.json'
+2024-09-10 17:31:14,150 Loaded 11 weapons
+2024-09-10 17:31:14,150 Loading enemies from 'game/enemies.json'
+2024-09-10 17:31:14,150 Loaded 30 enemies
+2024-09-10 17:31:14,150 Loading level 1 from levels
+2024-09-10 17:31:14,150 Level 1 loaded successfully
+2024-09-10 17:31:14,151 Level data: width=40, height=20, grid size=20x40
+2024-09-10 17:31:14,152 Game initialized
+2024-09-10 17:31:14,152 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-10 17:31:16,530 new_cell=., dy=0, dx=1, new_y=2, new_x=3
+2024-09-10 17:31:16,530 You moved.
+2024-09-10 17:31:16,726 new_cell=., dy=0, dx=1, new_y=2, new_x=4
+2024-09-10 17:31:16,727 You moved.
+2024-09-10 17:31:16,908 new_cell=., dy=0, dx=1, new_y=2, new_x=5
+2024-09-10 17:31:16,908 You moved.
+2024-09-10 17:31:17,135 new_cell=., dy=0, dx=1, new_y=2, new_x=6
+2024-09-10 17:31:17,135 You moved.
+2024-09-10 17:31:17,492 new_cell=., dy=0, dx=1, new_y=2, new_x=7
+2024-09-10 17:31:17,493 You moved.
+2024-09-10 17:31:17,943 new_cell=., dy=0, dx=1, new_y=2, new_x=8
+2024-09-10 17:31:17,943 Enemy in range!, dy=0, dx=1, new_y=2, new_x=8, y=1, x=9
+2024-09-10 17:31:17,943 You are in range of a Wolf!
+2024-09-10 17:31:17,943 Do you want to (A)ttack or (F)lee? 

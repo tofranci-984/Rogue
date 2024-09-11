@@ -7,7 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="inventory, combat log, message log updated.">
+    <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="Problems over writing game window with messages during combat">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -66,7 +66,7 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.level editor.executor": "Run",
     "Python.level_editor.executor": "Run",
-    "Python.main.executor": "Debug",
+    "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "com.codeium.enabled": "true",
     "git-widget-placeholder": "main",
@@ -353,7 +353,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726002582595</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Problems over writing game window with messages during combat">
+      <option name="closed" value="true" />
+      <created>1726003913661</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1726003913661</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -379,7 +387,8 @@
     <MESSAGE value="exit" />
     <MESSAGE value="level editor updates (file picker, potions, etc)" />
     <MESSAGE value="inventory, combat log, message log updated." />
-    <option name="LAST_COMMIT_MESSAGE" value="inventory, combat log, message log updated." />
+    <MESSAGE value="Problems over writing game window with messages during combat" />
+    <option name="LAST_COMMIT_MESSAGE" value="Problems over writing game window with messages during combat" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -401,28 +410,33 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>674</line>
+          <line>733</line>
           <option name="timeStamp" value="221" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>693</line>
+          <line>752</line>
           <option name="timeStamp" value="222" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>654</line>
+          <line>713</line>
           <option name="timeStamp" value="223" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>636</line>
-          <option name="timeStamp" value="225" />
+          <line>331</line>
+          <option name="timeStamp" value="231" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>314</line>
-          <option name="timeStamp" value="231" />
+          <line>697</line>
+          <option name="timeStamp" value="238" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>91</line>
+          <option name="timeStamp" value="239" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

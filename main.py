@@ -655,52 +655,16 @@ class Game:
         elif key == ord('2'):
             self.legend_window.erase()
             self.legend_window.refresh()
-            # self.show_inventory()
             self.change_weapon()
-        elif key == ord('?'):
-            self.help_window = curses.newwin(20, 30, 3, 5)  # message_window = curses.newwin(4, 40, 20, 0)
-            self.help_window.scrollok(True)
-            self.help_window.bkgd(" ", curses.color_pair(2))
-            self.help_window.box()
-
-            middle_col = self.help_window.getmaxyx()[1] // 2 - len("[ Help ]") // 2
-
-            y = 1
-            self.help_window.addstr(0, middle_col, "[ Help ]")
-
-            commands = [
-                "arrow keys - move",
-                "s - save game",
-                "l - load game",
-                "h - drink health potion",
-                "m - drink mana potion",
-                "+ - increase volume",
-                "- - decrease volume",
-                "u - show legend",
-                "1 - show message log",
-                "2 - show combat log",
-                "3 - change Weapon",
-                "S - toggle debug info",
-                "? - show this help",
-                "q - quit"
-            ]
-
-            for command in commands:
-                y += 1
-                self.help_window.addstr(y, 3, command)
-
-            y = 18
-            msg = "Press any key to continue..."
-            middle_col = self.help_window.getmaxyx()[1] // 2 - len(msg) // 2
-            self.help_window.addstr(y, 1, msg)
-            self.help_window.refresh()
-
+        elif key == ord('?'):  # help menu
+            self.show_help_menu()
             key = -1
             while key == -1:
                 key = self.screen.getch()
 
             self.help_window.erase()
             self.help_window.refresh()
+
         elif key == ord('S'):  # Shift-D (capital S in curses)
             self.show_debug_info = not self.show_debug_info
             self.add_message("Debug info toggled")
@@ -708,6 +672,44 @@ class Game:
         self.screen.nodelay(False)  # turn off nodelay / non-blocking input
         curses.echo()
         return True
+
+    def show_help_menu(self):
+        self.help_window = curses.newwin(20, 30, 3, 5)  # message_window = curses.newwin(4, 40, 20, 0)
+        self.help_window.scrollok(True)
+        self.help_window.bkgd(" ", curses.color_pair(2))
+        self.help_window.box()
+
+        middle_col = self.help_window.getmaxyx()[1] // 2 - len("[ Help ]") // 2
+
+        y = 1
+        self.help_window.addstr(0, middle_col, "[ Help ]")
+
+        commands = [
+            "arrow keys - move",
+            "s - save game",
+            "l - load game",
+            "h - drink health potion",
+            "m - drink mana potion",
+            "+ - increase volume",
+            "- - decrease volume",
+            "u - show legend",
+            "1 - show message log",
+            "2 - show combat log",
+            "3 - change Weapon",
+            "S - toggle debug info",
+            "? - show this help",
+            "q - quit"
+        ]
+
+        for command in commands:
+            y += 1
+            self.help_window.addstr(y, 3, command)
+
+        y = 18
+        msg = "Press a key to continue"
+        middle_col = self.help_window.getmaxyx()[1] // 2 - len(msg) // 2
+        self.help_window.addstr(y, 1, msg)
+        self.help_window.refresh()
 
     def show_inventory(self):
         # max_y, max_x = self.screen.getmaxyx()

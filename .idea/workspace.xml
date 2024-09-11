@@ -7,9 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="Problems over writing game window with messages during combat">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
+    <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()">
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -361,7 +359,15 @@
       <option name="project" value="LOCAL" />
       <updated>1726003913661</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()">
+      <option name="closed" value="true" />
+      <created>1726069746254</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1726069746254</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -388,7 +394,8 @@
     <MESSAGE value="level editor updates (file picker, potions, etc)" />
     <MESSAGE value="inventory, combat log, message log updated." />
     <MESSAGE value="Problems over writing game window with messages during combat" />
-    <option name="LAST_COMMIT_MESSAGE" value="Problems over writing game window with messages during combat" />
+    <MESSAGE value="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -410,17 +417,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>733</line>
+          <line>732</line>
           <option name="timeStamp" value="221" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>752</line>
+          <line>751</line>
           <option name="timeStamp" value="222" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>713</line>
+          <line>712</line>
           <option name="timeStamp" value="223" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -430,7 +437,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>697</line>
+          <line>696</line>
           <option name="timeStamp" value="238" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

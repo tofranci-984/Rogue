@@ -1,57 +1,13 @@
-2024-09-11 11:46:34,495 Start main
-2024-09-11 11:46:34,495 
+2024-09-11 12:26:09,430 Start main
+2024-09-11 12:26:09,430 
 Create Game
-2024-09-11 11:46:34,495 Loading weapons from 'game/weapons.json'
-2024-09-11 11:46:34,496 Loaded 11 weapons
-2024-09-11 11:46:34,496 Loading enemies from 'game/enemies.json'
-2024-09-11 11:46:34,496 Loaded 30 enemies
-2024-09-11 11:46:34,496 Loading level 1 from levels
-2024-09-11 11:46:34,496 Level 1 loaded successfully
-2024-09-11 11:46:34,497 Level data: width=40, height=20, grid size=20x40
-2024-09-11 11:46:34,499 Game initialized
-2024-09-11 11:46:34,499 Creating Player New Player with 25 HP and a Rusty Dagger
-2024-09-11 11:46:48,307 Debug info toggled
-2024-09-11 11:46:50,713 Debug info toggled
-2024-09-11 11:46:51,343 Debug info toggled
-2024-09-11 11:46:52,085 Debug info toggled
-2024-09-11 11:46:52,805 Debug info toggled
-2024-09-11 11:46:53,255 Debug info toggled
-2024-09-11 11:46:53,660 Debug info toggled
-2024-09-11 11:46:54,020 Debug info toggled
-2024-09-11 11:46:54,424 Debug info toggled
-2024-09-11 11:46:54,761 Debug info toggled
-2024-09-11 11:46:55,076 Debug info toggled
-2024-09-11 11:46:55,436 Debug info toggled
-2024-09-11 11:46:55,773 Debug info toggled
-2024-09-11 11:46:56,132 Debug info toggled
-2024-09-11 11:46:56,469 Debug info toggled
-2024-09-11 11:46:56,831 Debug info toggled
-2024-09-11 11:46:57,143 Debug info toggled
-2024-09-11 11:46:57,481 Debug info toggled
-2024-09-11 11:46:57,840 Debug info toggled
-2024-09-11 11:46:58,178 Debug info toggled
-2024-09-11 11:46:59,054 Debug info toggled
-2024-09-11 11:47:03,898 new_cell=., dy=0, dx=1, new_y=2, new_x=3
-2024-09-11 11:47:03,898 You moved.
-2024-09-11 11:47:04,046 new_cell=., dy=0, dx=1, new_y=2, new_x=4
-2024-09-11 11:47:04,046 You moved.
-2024-09-11 11:47:04,205 new_cell=., dy=0, dx=1, new_y=2, new_x=5
-2024-09-11 11:47:04,205 You moved.
-2024-09-11 11:47:04,383 new_cell=., dy=0, dx=1, new_y=2, new_x=6
-2024-09-11 11:47:04,384 You moved.
-2024-09-11 11:47:05,036 new_cell=G, dy=1, dx=0, new_y=3, new_x=6
-2024-09-11 11:47:05,036 You have found 57 gold!
-2024-09-11 11:47:05,238 new_cell=., dy=0, dx=1, new_y=3, new_x=7
-2024-09-11 11:47:05,238 You moved.
-2024-09-11 11:47:05,419 new_cell=., dy=0, dx=1, new_y=3, new_x=8
-2024-09-11 11:47:05,419 You moved.
-2024-09-11 11:47:05,579 new_cell=., dy=0, dx=1, new_y=3, new_x=9
-2024-09-11 11:47:05,579 You moved.
-2024-09-11 11:47:05,710 new_cell=., dy=0, dx=1, new_y=3, new_x=10
-2024-09-11 11:47:05,710 You moved.
-2024-09-11 11:47:05,871 new_cell=., dy=0, dx=1, new_y=3, new_x=11
-2024-09-11 11:47:05,871 You moved.
-2024-09-11 11:47:06,002 new_cell=G, dy=0, dx=1, new_y=3, new_x=12
-2024-09-11 11:47:06,002 You have found 3 gold!
-2024-09-11 11:47:06,137 new_cell=., dy=0, dx=1, new_y=3, new_x=13
-2024-09-11 11:47:06,137 You moved.
+2024-09-11 12:26:09,430 Loading weapons from 'game/weapons.json'
+2024-09-11 12:26:09,430 Loaded 11 weapons
+2024-09-11 12:26:09,431 Loading enemies from 'game/enemies.json'
+2024-09-11 12:26:09,431 Loaded 30 enemies
+2024-09-11 12:26:09,431 Loading level 1 from levels
+2024-09-11 12:26:09,431 Level 1 loaded successfully
+2024-09-11 12:26:09,431 Level data: width=40, height=20, grid size=20x40
+2024-09-11 12:26:09,432 Game initialized
+2024-09-11 12:26:09,432 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-11 12:26:53,252 End main

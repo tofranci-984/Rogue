@@ -19,6 +19,10 @@ ch.setLevel(logging.DEBUG)
 logging.basicConfig(filename='log.txt', filemode='w', format='%(asctime)s %(message)s',
                     level=logging.DEBUG)  # filemode= w will overwrite file each time
 
+# Define the level-up experience points
+level_up_experience = [
+    20, 50, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000
+]
 
 class Weapon:
     def __init__(self, name, damage, attack_range):
@@ -73,6 +77,22 @@ class Player:
         self.items.append(self.weapon)
         logger.debug(f"Creating Player {name} with {hp} HP and a {self.weapon.name}")
 
+    def level_up(self):
+        self.level += 1
+        self.max_hp += 10
+        self.hp = min(self.hp + 10, self.max_hp)
+        self.max_mana += 5
+        self.mana = min(self.mana + 5, self.max_mana)
+        self.strength += 5
+        self.dexterity += 5
+        self.max_strength = self.strength
+        self.max_dexterity = self.dexterity
+
+    def check_level_up(self):
+        for level, experience in enumerate(level_up_experience):
+            if self.xp >= experience and self.level <= level + 1:
+                self.level_up()
+                return True
 
 class Game:
     def __init__(self):
@@ -89,7 +109,7 @@ class Game:
         self.screen.keypad(True)
 
         # Initialize game variables
-        self.terminal_height, self.terminal_width = self.curses.LINES, self.curses.COLS
+        self.terminal_height, self.terminal_width = curses.LINES, curses.COLS
         if self.terminal_width < 80 or self.terminal_height < 24:
             raise ValueError(
                 f"Terminal size must be at least 80x24.  Is currently {self.terminal_width}, {self.terminal_height}")
@@ -109,7 +129,6 @@ class Game:
         self.level = 1
         self.event_log = []
         self.xp = 0
-        self.message_log = []
         self.level_height = 40
         self.level_width = 20
         self.game_over = False
@@ -123,8 +142,13 @@ class Game:
         self.message_window = curses.newwin(4, 40, 20, 0)
         self.message_window.scrollok(True)
         self.message_window.bkgd(" ", curses.color_pair(2))
-
         self.messages = []
+        self.message_log = []
+
+        self.combat_window = curses.newwin(self.viewport_height - 2, self.viewport_width , 0, 0)
+        self.combat_window.scrollok(True)
+        self.combat_messages = []
+        self.combat_message_log = []
 
         # Load weapon and enemy data
         self.load_weapons()
@@ -132,12 +156,29 @@ class Game:
 
         # Load level data
         level_data = self.load_level()
+
+        # Generate level
+        self.generate_level()
+
+        # grid = [['#' for _ in range(self.legend_width)] for _ in range(self.level_height)]
+        # self.generate_level(self.grid, self.level_width, self.level_height)
+        # self.generate_level(self.grid, self.level_width, self.level_height)
+        self.generate_level(self.grid)
+
         if level_data:
-            self.player_pos = list(level_data['entry_point'])  # this may be outside the viewport
+            if 'entry_point' in level_data:
+                self.player_pos = list(level_data['entry_point'])  # this may be outside the viewport
+            else:
+                logger.error("Entry point not found in level data")
+                self.add_message("Error: Entry point not found in level data")
+                self.game_over = True
             self.grid[int(self.player_pos[1])][int(self.player_pos[0])] = '@'
         else:
             logger.error("Failed to load level data")
             self.add_message("Error: Failed to load level data")
+
+        # Populate level with enemies and items
+        self.populate_level(self.grid, self.player_pos, 10, 10, 10, 10)
 
         # Create separate windows for each section
         if self.level_width + self.legend_width < self.terminal_width:
@@ -179,8 +220,6 @@ class Game:
         self.soundON = False
         self.add_message("Game initialized")
 
-    import curses
-
     def parse_message(self, message):
         result = ""
         attrs = 0
@@ -208,6 +247,162 @@ class Game:
                 # result += "[" + part
         return result, attrs
 
+    def distance(self, a, b):
+        return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+    def populate_level(self, grid, player_pos, num_enemies, num_potions, num_gold, num_items):
+        floor_cells = [(y, x) for y, row in enumerate(grid) for x, cell in enumerate(row) if cell == '.']
+        num_floor_cells = len(floor_cells)
+
+        # Ensure there are enough floor cells for placement
+        if num_enemies + num_potions + num_gold + num_items > num_floor_cells:
+            raise ValueError("Not enough floor cells to place all items")
+
+        # Create sets to store the coordinates of placed items
+        enemy_cells = set()
+        potion_cells = set()
+        gold_cells = set()
+        item_cells = set()
+
+        # Randomly place enemies, potions, gold, and items
+        for _ in range(num_enemies):
+            while True:
+                enemy_cell = random.choice(floor_cells)
+                if self.distance(enemy_cell, player_pos) >= 3 and len(enemy_cells) < num_enemies:
+                    grid[enemy_cell[0]][enemy_cell[1]] = 'E'
+                    enemy_cells.add(enemy_cell)
+                    floor_cells.remove(enemy_cell)
+                    break
+
+        for _ in range(num_potions):
+            while True:
+                potion_cell = random.choice(floor_cells)
+                if self.distance(potion_cell, player_pos) >= 3 and len(potion_cells) < num_potions:
+                    grid[potion_cell[0]][potion_cell[1]] = random.choice(['P', 'H', 'M'])
+                    potion_cells.add(potion_cell)
+                    floor_cells.remove(potion_cell)
+                    break
+
+        for _ in range(num_gold):
+            while True:
+                gold_cell = random.choice(floor_cells)
+                if self.distance(gold_cell, player_pos) >= 3 and len(gold_cells) < num_gold:
+                    grid[gold_cell[0]][gold_cell[1]] = '$'
+                    gold_cells.add(gold_cell)
+                    floor_cells.remove(gold_cell)
+                    break
+
+        for _ in range(num_items):
+            while True:
+                item_cell = random.choice(floor_cells)
+                if self.distance(item_cell, player_pos) >= 3 and len(item_cells) < num_items:
+                    grid[item_cell[0]][item_cell[1]] = 'T'
+                    item_cells.add(item_cell)
+                    floor_cells.remove(item_cell)
+                    break
+
+    def generate_level(self, grid, width, height):
+        def create_room(x, y, w, h):
+            num_dots = 0
+            for i in range(x, x + w):
+                for j in range(y, y + h):
+                    if i == x or i == x + w - 1 or j == y or j == y + h - 1:
+                        grid[j][i] = '#'
+                    elif random.random() < 0.2:
+                        grid[j][i] = '.'
+                        num_dots += 1
+                    else:
+                        grid[j][i] = '#'
+
+        def add_door(x, y):
+            doors = 0
+            if random.random() < 0.5:
+                grid[y][x] = '+'
+                doors += 1
+
+        def carve_passage(x, y, dx, dy):
+            nonlocal num_dots
+
+            while x >= 0 and x < width and y >= 0 and y < height:
+                if grid[y][x] == '#':
+                    num_dots -= 1
+                    grid[y][x] = '.'
+                    carve_passage(x + dx, y + dy, dx, dy)
+                x += dx
+                y += dy
+
+        num_dots = 0
+        doors = 0
+
+        # Initialize the grid with walls
+        grid[:] = ['#' for _ in range(width)]
+        for row in grid:
+            row[:] = ['#' for _ in range(height)]
+
+        # Create rooms
+        create_room(2, 2, width - 4, height - 4)
+
+        # Add doors to rooms
+        for x in range(2, width - 2, 4):
+            for y in range(2, height - 2, 4):
+                if random.random() < 0.5:
+                    add_door(x, y)
+
+        # Carve passages
+        carve_passage(1, random.randint(0, height - 1), 1, 0)
+        carve_passage(width - 2, random.randint(0, height - 1), -1, 0)
+        carve_passage(random.randint(0, width - 1), 1, 0, 1)
+        carve_passage(random.randint(0, width - 1), height - 2, 0, -1)
+
+        # Place stairs up and down
+        stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
+        while grid[stair_y][stair_x] != '.':
+            stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
+        grid[stair_y][stair_x] = '<'
+
+        stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
+        while grid[stair_y][stair_x] != '.':
+            stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
+        grid[stair_y][stair_x] = '>'
+
+        # Ensure there is a path from the stair up to the stair down
+        carve_passage(stair_x, stair_y, (stair_x - stair_x % 2) * -1, (stair_y - stair_y % 2) * -1)
+
+        # Add extra floor cells to meet the required density
+        while num_dots < (width * height) * 0.4:
+            x, y = random.randint(0, width - 1), random.randint(0, height - 1)
+            if grid[y][x] == '#':
+                num_dots += 1
+                grid[y][x] = '.'
+            # Ensure there are no isolated floor cells
+            for x in range(width):
+                for y in range(height):
+                    if grid[y][x] == '.':
+                        if (grid[max(0, y - 1)][x] not in ('#', '.') or
+                                grid[min(height - 1, y + 1)][x] not in ('#', '.') or
+                                grid[y][max(0, x - 1)] not in ('#', '.') or
+                                grid[y][min(width - 1, x + 1)] not in ('#', '.')):
+                            grid[y][x] = '#'
+                            num_dots -= 1
+
+            # Ensure there are at least 2 walls between rooms
+            for x in range(2, width - 2, 4):
+                for y in range(2, height - 2, 4):
+                    if grid[y][x] == '.' and grid[y][x + 2] == '.':
+                        if random.random() < 0.5:
+                            grid[y + 1][x + 1] = '#'
+                            num_dots -= 1
+                        if random.random() < 0.5:
+                            grid[y - 1][x + 1] = '#'
+                            num_dots -= 1
+                        if random.random() < 0.5:
+                            grid[y + 1][x + 3] = '#'
+                            num_dots -= 1
+                        if random.random() < 0.5:
+                            grid[y - 1][x + 3] = '#'
+                            num_dots -= 1
+
+
     def update_message_window(self, message_window_height=4):
         max_width = self.message_window.getmaxyx()[1]
         lines = []
@@ -231,30 +426,49 @@ class Game:
             self.message_window.addstr(i, 0, line, attrs)
         self.message_window.refresh()
 
+    def update_combat_message_window(self):
+        max_width = self.combat_window.getmaxyx()[1]
+        max_height = self.combat_window.getmaxyx()[0] - 2
+        lines = []
+        combat_message_window_height = self.viewport_height - 4 # Subtract 1 for the title line
+        for i, message in enumerate(self.combat_message_log[-combat_message_window_height:]):
+            formatted_message, attrs = self.parse_message(message)
+            words = formatted_message.split()
+            current_line = ""
+            for word in words:
+                if len(current_line + " " + word) > max_width:
+                    lines.append((current_line.strip(), attrs))
+                    current_line = word
+                else:
+                    current_line += " " + word
+            if current_line:
+                lines.append((current_line.strip(), attrs))
+
+        self.combat_window.clear()
+        self.combat_window.erase()
+        self.combat_window.box()
+        self.combat_window.addstr(0, 2, "[ Combat Log ]", curses.color_pair(3))
+
+        max_width= self.combat_window.getmaxyx()[1] - 2
+        total_lines = len(lines)
+        for i, (line, attrs) in enumerate(lines):
+            logger.debug(
+                f"line: {line}, attrs: {attrs}, total_lines: {total_lines}, i: {i}, max_height: {max_height}, max_width: {max_width}")
+            self.combat_window.addnstr(i + 1, 1, line, max_width, attrs)
+        self.combat_window.refresh()
+
     def add_message(self, message, message_window_height=4):
         """
         Add a message to the message log.
         """
         self.message_log.append(message)
         logger.debug(f"{message}")
-
-        # Add combat messages
-        if message.startswith("You defeated the"):
-            self.message_window.erase()
-            self.message_window.clear()
-            self.update_message_window(message_window_height)
-
-            # Expand message log for combat
-            self.message_window.resize(self.viewport_height, self.viewport_width)
-            self.message_window.mvwin(0, 0)
-            self.message_window.refresh()
-
-            # Add defeated enemy message
-            self.message_log.append(f"You gained {enemy.xp} XP!")
-            self.message_log.append(f"You have {self.player.xp} XP and are at level {self.player.level}.")
-
         self.message_window.erase()
         self.update_message_window(message_window_height)
+    def add_combat_message(self, message, message_window_height=10):
+        self.combat_message_log.append(message)
+        logger.debug(f"{message}")
+        self.update_combat_message_window()
 
     def calculate_viewport(self):
         new_viewport_x = self.player_pos[0] - self.viewport_width // 2
@@ -305,6 +519,7 @@ class Game:
                             monster_adjacent = True
 
                             # Start combat
+                            # create combat window
                             eligible_enemies = [enemy for enemy in self.enemies if enemy.level <= self.player.level]
                             if eligible_enemies:
                                 enemy = random.choice(eligible_enemies)
@@ -314,58 +529,84 @@ class Game:
                                 logger.debug(f"No enemies at or below your level!: LVL={self.player.level}")
                                 enemy = random.choice(self.enemies)  # Choose a random enemy
 
-                            self.message_window.erase()
-                            self.message_window.refresh()
-
-                            # Expand message log for combat
-                            self.message_window.resize(self.viewport_height, self.viewport_width)
-                            self.message_window.mvwin(0, 0)
-                            self.message_window.refresh()
+                            self.combat_window.erase()
+                            self.combat_window.box()
+                            self.combat_window.addstr(0, 2, "[ Combat Log ]", curses.color_pair(3))
+                            self.combat_window.refresh()
 
                             while self.player.hp > 0 and enemy.hp > 0:
-                                self.add_message(f"You are in range of a {enemy.name}!", 20)
-                                self.add_message("Do you want to (A)ttack or (F)lee? ", 20)
+                                self.add_combat_message(f"You are in range of a {enemy.name} ({enemy.hp}/{enemy.start_hp})!")
+                                self.add_combat_message("Do you want to (A)ttack or (F)lee? ")
                                 key = -1
                                 while key == -1:
                                     key = self.screen.getch()
 
-                                self.update()
-
                                 if key == ord('a'):
                                     # Player attacks
-                                    attack_damage = random.randint(1, self.player.weapon.damage)
+                                    min_damage = 1 + self.player.level + (self.player.strength // 4)
+                                    max_damage = min_damage + round(self.player.weapon.damage * (1+(self.player.strength/100)))
+                                    attack_damage = random.randint(min_damage, max_damage)
                                     enemy.hp -= attack_damage
-                                    self.add_message(
-                                        f"You attack {enemy.name} for [red]{attack_damage}[/red] damage.", 20)
-                                    self.add_message(f"{enemy.name} HP ({enemy.hp}/{enemy.start_hp})", 20)
+                                    self.add_combat_message(
+                                        f"You attack {enemy.name} for {attack_damage} damage.")
+                                    self.add_combat_message(f"{enemy.name} HP ({enemy.hp}/{enemy.start_hp})")
                                     if self.soundON:
                                         self.enemy_sound.play()
 
                                     if enemy.hp <= 0:
-                                        self.add_message(f"You defeated the {enemy.name}!", 20)
+                                        self.add_combat_message(f"You defeated the {enemy.name}!")
+                                        self.add_message(f"You defeated the {enemy.name}!")
                                         self.enemies.remove(enemy)
                                         self.grid[y][x] = '.'  # clear the enemy cell
                                         self.game_window.refresh()
-                                        self.add_message(f"You gained {enemy.xp} XP!", 20)
+                                        self.add_combat_message(f"You gained {enemy.xp} XP!")
+                                        self.add_message(f"You gained {enemy.xp} XP!")
                                         self.player.xp += enemy.xp
-                                        # Restore message log size
-                                        self.message_window.resize(4, 40)
-                                        self.message_window.mvwin(20, 0)
-                                        self.message_window.refresh()
+
+                                        # Check if player levelled up
+                                        if self.player.check_level_up():
+                                            self.add_message(f"You are now level {self.player.level}!")
+                                            self.add_message(f"Check your new stats!")
+                                            self.legend_window.erase()
+                                            self.legend_window.clear()
+                                            self.legend_window.refresh()
+                                            self.update()
+
+                                        # add random gold to player based on monster level
+                                        gold = random.randint(self.player.level, enemy.level * 10)
+                                        self.add_combat_message(f"{enemy.name} dropped {gold} gold!")
+                                        self.add_combat_message(f"Press a key to exit combat")
+                                        # get input to exit combat window
+                                        key = -1
+                                        while key == -1:
+                                            key = self.screen.getch()
+                                        self.add_combat_message(f"\n")
                                         break
 
                                     # Enemy attacks
-                                    attack_damage = random.randint(1, enemy.damage)
-                                    self.player.hp -= attack_damage
-                                    self.add_message(f"{enemy.name} attacks you for [red]{attack_damage}[/red] damage.", 20)
-                                    self.legend_window.refresh()  # Refresh the legend window for HP updates
+                                    # add a random dexterity test for avoiding enemy attacks.
+                                    # As dex increases, chance of avoiding increases
+                                    dex_check= random.randint(self.player.dexterity, 100)
+                                    if dex_check > 50:
+                                        # Player dodges the attack
+                                        self.add_combat_message(f"You dodge the attack from the {enemy.name}!")
+                                    else:  # Player is hit
+                                        logger.debug(f"enemy level={enemy.level}, enemy damage={enemy.damage}, player level={self.player.level}, ")
+                                        attack_damage = random.randint(1 + enemy.level, enemy.damage)
+                                        logger.debug(f"attack damage={attack_damage}")
+                                        self.player.hp -= attack_damage
+                                        self.add_combat_message(f"{enemy.name} attacks you for {attack_damage} damage.")
 
-                                    # self.update()  # Update the game window, legend window, and message window
+                                    self.legend_window.erase()
+                                    self.legend_window.clear()
+                                    self.legend_window.refresh()
+                                    self.update()
+
                                     if self.soundON:
                                         self.enemy_sound.play()
 
                                     if self.player.hp <= 0:
-                                        self.add_message(f"You have been defeated by the {enemy.name}!", 20)
+                                        self.add_combat_message(f"You have been defeated by the {enemy.name}!")
                                         self.game_over = True
                                         break
                                 elif key == ord('f'):
@@ -405,10 +646,10 @@ class Game:
                                         self.add_message("You cannot move that way!", 20)
                                         continue
 
-                                break
-                            if monster_adjacent:
-                                self.update_message_window(20)
-                                break
+                        if monster_adjacent:
+                            # try removing this line
+                            # self.update_combat_message_window()
+                            break
 
         if not monster_adjacent:
             if new_cell == '.' or new_cell == '@':  # floor or player
@@ -647,9 +888,6 @@ class Game:
             self.increase_volume()
         elif key == ord('-'):
             self.decrease_volume()
-        elif key == ord('u'):
-            self.legend_window.refresh()
-            self.update()
         elif key == ord('1'):
             self.view_message_log()
         elif key == ord('2'):
@@ -674,7 +912,7 @@ class Game:
         return True
 
     def show_help_menu(self):
-        self.help_window = curses.newwin(20, 30, 3, 5)  # message_window = curses.newwin(4, 40, 20, 0)
+        self.help_window = curses.newwin(23, 30, 1, 5)  # message_window = curses.newwin(4, 40, 20, 0)
         self.help_window.scrollok(True)
         self.help_window.bkgd(" ", curses.color_pair(2))
         self.help_window.box()
@@ -685,30 +923,36 @@ class Game:
         self.help_window.addstr(0, middle_col, "[ Help ]")
 
         commands = [
-            "arrow keys - move",
-            "s - save game",
-            "l - load game",
-            "h - drink health potion",
-            "m - drink mana potion",
-            "+ - increase volume",
-            "- - decrease volume",
-            "u - show legend",
-            "1 - show message log",
-            "2 - show combat log",
-            "3 - change Weapon",
-            "S - toggle debug info",
-            "? - show this help",
-            "q - quit"
+            ("<up>", "move up"),
+            ("<down>", "move down"),
+            ("<left>", "move left"),
+            ("<right>", "move right"),
+            ("s", "save game"),
+            ("l", "load game"),
+            ("h", "drink health potion"),
+            ("m", "drink mana potion"),
+            ("+", "increase volume"),
+            ("-", "decrease volume"),
+            ("1", "show message log"),
+            ("2", "show combat log"),
+            ("3", "change Weapon"),
+            ("S", "toggle debug info"),
+            ("?", "show this help"),
+            ("q", "quit")
         ]
 
-        for command in commands:
+        for key, description in commands:
             y += 1
-            self.help_window.addstr(y, 3, command)
+            key_color = curses.color_pair(4)  # Cyan color for keys
+            desc_color = curses.color_pair(3)  # Another color for descriptions
+            self.help_window.addstr(y, 3, key, key_color)
+            self.help_window.addstr(" - ", curses.color_pair(2))
+            self.help_window.addstr(description, desc_color)
 
-        y = 18
+        y = 21
         msg = "Press a key to continue"
         middle_col = self.help_window.getmaxyx()[1] // 2 - len(msg) // 2
-        self.help_window.addstr(y, 1, msg)
+        self.help_window.addstr(y, middle_col, msg)
         self.help_window.refresh()
 
     def show_inventory(self):
@@ -770,7 +1014,9 @@ class Game:
                 self.screen.addnstr(i, 0, message, max_x - 1)
             self.screen.addnstr(max_y - 1, 0, "Press 'q' to exit, 'j' to scroll down, 'k' to scroll up", max_x - 1)
             self.screen.refresh()
-            key = self.screen.getch()
+            key = -1
+            while key == -1:
+                key = self.screen.getch()
             if key == ord('q'):
                 self.screen.clear()
                 self.screen.refresh()
@@ -908,7 +1154,6 @@ class Game:
 
     def run(self):
         # create player
-
         self.player = Player("New Player", 25, self.weapons)
 
         self.update()

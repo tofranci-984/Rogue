@@ -1,13 +1,10 @@
-2024-09-11 12:26:09,430 Start main
-2024-09-11 12:26:09,430 
+2024-09-12 12:01:49,032 Start main
+2024-09-12 12:01:49,033 
 Create Game
-2024-09-11 12:26:09,430 Loading weapons from 'game/weapons.json'
-2024-09-11 12:26:09,430 Loaded 11 weapons
-2024-09-11 12:26:09,431 Loading enemies from 'game/enemies.json'
-2024-09-11 12:26:09,431 Loaded 30 enemies
-2024-09-11 12:26:09,431 Loading level 1 from levels
-2024-09-11 12:26:09,431 Level 1 loaded successfully
-2024-09-11 12:26:09,431 Level data: width=40, height=20, grid size=20x40
-2024-09-11 12:26:09,432 Game initialized
-2024-09-11 12:26:09,432 Creating Player New Player with 25 HP and a Rusty Dagger
-2024-09-11 12:26:53,252 End main
+2024-09-12 12:01:49,033 Loading weapons from 'game/weapons.json'
+2024-09-12 12:01:49,033 Loaded 11 weapons
+2024-09-12 12:01:49,034 Loading enemies from 'game/enemies.json'
+2024-09-12 12:01:49,034 Loaded 30 enemies
+2024-09-12 12:01:49,034 Loading level 1 from levels
+2024-09-12 12:01:49,034 Level 1 loaded successfully
+2024-09-12 12:01:49,034 Level data: width=40, height=20, grid size=20x40

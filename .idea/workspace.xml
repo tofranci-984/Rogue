@@ -8,6 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eeac8c3e-67a6-4151-ba24-89c64a294282" name="Changes" comment="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,7 +47,7 @@
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -64,11 +66,11 @@
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;Python.level editor.executor&quot;: &quot;Run&quot;,
     &quot;Python.level_editor.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;com.codeium.enabled&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;aDefault&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -367,7 +369,31 @@
       <option name="project" value="LOCAL" />
       <updated>1726069746254</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()">
+      <option name="closed" value="true" />
+      <created>1726072022667</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1726072022668</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()">
+      <option name="closed" value="true" />
+      <created>1726072039541</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1726072039541</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()">
+      <option name="closed" value="true" />
+      <created>1726072100736</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1726072100736</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -394,6 +420,7 @@
     <MESSAGE value="level editor updates (file picker, potions, etc)" />
     <MESSAGE value="inventory, combat log, message log updated." />
     <MESSAGE value="Problems over writing game window with messages during combat" />
+    <MESSAGE value="updated show help" />
     <MESSAGE value="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()" />
     <option name="LAST_COMMIT_MESSAGE" value="Added help screen and curses.wrapper to help restore terminal.&#10;Changed terminal width to use curses.COLs and curses.LINES instead of getmaxyx()" />
   </component>
@@ -417,33 +444,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>732</line>
+          <line>976</line>
           <option name="timeStamp" value="221" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>751</line>
+          <line>995</line>
           <option name="timeStamp" value="222" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>712</line>
-          <option name="timeStamp" value="223" />
+          <line>650</line>
+          <option name="timeStamp" value="236" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>331</line>
-          <option name="timeStamp" value="231" />
+          <line>566</line>
+          <option name="timeStamp" value="245" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>696</line>
-          <option name="timeStamp" value="238" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>91</line>
-          <option name="timeStamp" value="239" />
+          <line>160</line>
+          <option name="timeStamp" value="255" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

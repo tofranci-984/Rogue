@@ -158,12 +158,7 @@ class Game:
         level_data = self.load_level()
 
         # Generate level
-        self.generate_level()
-
-        # grid = [['#' for _ in range(self.legend_width)] for _ in range(self.level_height)]
-        # self.generate_level(self.grid, self.level_width, self.level_height)
-        # self.generate_level(self.grid, self.level_width, self.level_height)
-        self.generate_level(self.grid)
+        self.generate_level(self.level_width, self.level_height, 3, 10, 10, 5)
 
         if level_data:
             if 'entry_point' in level_data:
@@ -178,7 +173,7 @@ class Game:
             self.add_message("Error: Failed to load level data")
 
         # Populate level with enemies and items
-        self.populate_level(self.grid, self.player_pos, 10, 10, 10, 10)
+        self.populate_level(10, 10, 10, 10)
 
         # Create separate windows for each section
         if self.level_width + self.legend_width < self.terminal_width:
@@ -250,8 +245,8 @@ class Game:
     def distance(self, a, b):
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
-    def populate_level(self, grid, player_pos, num_enemies, num_potions, num_gold, num_items):
-        floor_cells = [(y, x) for y, row in enumerate(grid) for x, cell in enumerate(row) if cell == '.']
+    def populate_level(self, num_enemies, num_potions, num_gold, num_items):
+        floor_cells = [(y, x) for y, row in enumerate(self.grid) for x, cell in enumerate(row) if cell == '.']
         num_floor_cells = len(floor_cells)
 
         # Ensure there are enough floor cells for placement
@@ -264,143 +259,121 @@ class Game:
         gold_cells = set()
         item_cells = set()
 
-        # Randomly place enemies, potions, gold, and items
+
+    def generate_level(self, width, height, num_rooms, num_enemies, num_potions, num_items):
+        def create_room(x, y, w, h):
+            for i in range(x, x + w):
+                for j in range(y, y + h):
+                    self.grid[j][i] = '.'
+
+        def add_door(x, y, w, h):
+            doors = 0
+            if random.random() < 0.5 and x > 1:
+                self.grid[y][x - 2] = '+'
+                doors += 1
+                self.grid[y][x - 1] = '.'
+            if random.random() < 0.5 and x < w - 2:
+                self.grid[y][x + 2] = '+'
+                doors += 1
+                self.grid[y][x + 1] = '.'
+            if random.random() < 0.5 and y > 1:
+                self.grid[y - 2][x] = '+'
+                doors += 1
+                self.grid[y - 1][x] = '.'
+            if random.random() < 0.5 and y < h - 2:
+                self.grid[y + 2][x] = '+'
+                doors += 1
+                self.grid[y + 1][x] = '.'
+            return doors
+
+        def connect_rooms(room1, room2):
+            if room1[0] < room2[0]:
+                self.grid[room1[1] + room1[3] - 1][room1[0] + room1[2]] = '.'
+                self.grid[room2[1]][room2[0] - 1] = '.'
+            else:
+                self.grid[room1[1]][room1[0] - room1[2] + 1] = '.'
+                self.grid[room2[1] + room2[3]][room2[0] + room2[2]] = '.'
+
+        self.grid = []
+        for _ in range(height):
+            self.grid.append(['#' for _ in range(width)])
+
+        # Add rooms
+        rooms = []
+        while len(rooms) < num_rooms:
+            room_width = random.randint(5, 15)
+            room_height = random.randint(5, 15)
+            room_x = random.randint(0, width - room_width - 1)
+            room_y = random.randint(0, height - room_height - 1)
+            room_overlaps = False
+            for room in rooms:
+                if (room_x < room[0] + room[2] and
+                        room_x + room_width > room[0] and
+                        room_y < room[1] + room[3] and
+                        room_height + room_y > room[1]):
+                    room_overlaps = True
+                    break
+            if not room_overlaps:
+                create_room(room_x, room_y, room_width, room_height)
+                doors = add_door(room_x, room_y, room_width, room_height)
+                rooms.append((room_x, room_y, room_width, room_height, doors))
+
+        # Add stairs up and down
+        stairs_placed = False
+        while not stairs_placed:
+            stair_room_index = random.randint(0, num_rooms - 1)
+            if rooms[stair_room_index][4] > 0:
+                self.grid[rooms[stair_room_index][1] + random.randint(0, rooms[stair_room_index][3] - 1)] \
+                    [rooms[stair_room_index][0] + random.randint(0, rooms[stair_room_index][2] - 1)] = '<'
+                self.grid[rooms[stair_room_index][1] + random.randint(0, rooms[stair_room_index][3] - 1)] \
+                    [rooms[stair_room_index][0] + random.randint(0, rooms[stair_room_index][2] - 1)] = '>'
+                stairs_placed = True
+
+        # Connect rooms
+        for i in range(num_rooms):
+            for j in range(i + 1, num_rooms):
+                if random.random() < 0.5 and not rooms[i][0] < rooms[j][0] + rooms[j][2] - 3 and \
+                        not rooms[i][0] + rooms[i][2] > rooms[j][0] + 3 and \
+                        not rooms[i][1] < rooms[j][1] + rooms[j][3] - 3 and \
+                        not rooms[i][1] + rooms[i][3] > rooms[j][1] + 3:
+                    connect_rooms(rooms[i], rooms[j])
+
+        # Add passages
+        for i in range(num_rooms):
+            for j in range(i + 1, num_rooms):
+                if random.random() < 0.5 and not rooms[i][0] < rooms[j][0] + rooms[j][2] - 3 and \
+                        not rooms[i][0] + rooms[i][2] > rooms[j][0] + 3 and \
+                        not rooms[i][1] < rooms[j][1] + rooms[j][3] - 3 and \
+                        not rooms[i][1] + rooms[i][3] > rooms[j][1] + 3:
+                    self.grid[rooms[i][1] + random.randint(0, rooms[i][3] - 1)] \
+                        [rooms[i][0] + random.randint(0, rooms[i][2] - 1)] = '.'
+                    self.grid[rooms[j][1] + random.randint(0, rooms[j][3] - 1)] \
+                        [rooms[j][0] + random.randint(0, rooms[j][2] - 1)] = '.'
+
+        # Add enemies, potions, and items
         for _ in range(num_enemies):
             while True:
-                enemy_cell = random.choice(floor_cells)
-                if self.distance(enemy_cell, player_pos) >= 3 and len(enemy_cells) < num_enemies:
-                    grid[enemy_cell[0]][enemy_cell[1]] = 'E'
-                    enemy_cells.add(enemy_cell)
-                    floor_cells.remove(enemy_cell)
+                room_index = random.randint(0, num_rooms - 1)
+                if rooms[room_index][4] > 0:
+                    self.grid[rooms[room_index][1] + random.randint(0, rooms[room_index][3] - 1)] \
+                        [rooms[room_index][0] + random.randint(0, rooms[room_index][2] - 1)] = 'E'
                     break
 
         for _ in range(num_potions):
             while True:
-                potion_cell = random.choice(floor_cells)
-                if self.distance(potion_cell, player_pos) >= 3 and len(potion_cells) < num_potions:
-                    grid[potion_cell[0]][potion_cell[1]] = random.choice(['P', 'H', 'M'])
-                    potion_cells.add(potion_cell)
-                    floor_cells.remove(potion_cell)
-                    break
-
-        for _ in range(num_gold):
-            while True:
-                gold_cell = random.choice(floor_cells)
-                if self.distance(gold_cell, player_pos) >= 3 and len(gold_cells) < num_gold:
-                    grid[gold_cell[0]][gold_cell[1]] = '$'
-                    gold_cells.add(gold_cell)
-                    floor_cells.remove(gold_cell)
+                room_index = random.randint(0, num_rooms - 1)
+                if rooms[room_index][4] > 0:
+                    self.grid[rooms[room_index][1] + random.randint(0, rooms[room_index][3] - 1)] \
+                        [rooms[room_index][0] + random.randint(0, rooms[room_index][2] - 1)] = 'P'
                     break
 
         for _ in range(num_items):
             while True:
-                item_cell = random.choice(floor_cells)
-                if self.distance(item_cell, player_pos) >= 3 and len(item_cells) < num_items:
-                    grid[item_cell[0]][item_cell[1]] = 'T'
-                    item_cells.add(item_cell)
-                    floor_cells.remove(item_cell)
+                room_index = random.randint(0, num_rooms - 1)
+                if rooms[room_index][4] > 0:
+                    self.grid[rooms[room_index][1] + random.randint(0, rooms[room_index][3] - 1)] \
+                        [rooms[room_index][0] + random.randint(0, rooms[room_index][2] - 1)] = 'T'
                     break
-
-    def generate_level(self, grid, width, height):
-        def create_room(x, y, w, h):
-            num_dots = 0
-            for i in range(x, x + w):
-                for j in range(y, y + h):
-                    if i == x or i == x + w - 1 or j == y or j == y + h - 1:
-                        grid[j][i] = '#'
-                    elif random.random() < 0.2:
-                        grid[j][i] = '.'
-                        num_dots += 1
-                    else:
-                        grid[j][i] = '#'
-
-        def add_door(x, y):
-            doors = 0
-            if random.random() < 0.5:
-                grid[y][x] = '+'
-                doors += 1
-
-        def carve_passage(x, y, dx, dy):
-            nonlocal num_dots
-
-            while x >= 0 and x < width and y >= 0 and y < height:
-                if grid[y][x] == '#':
-                    num_dots -= 1
-                    grid[y][x] = '.'
-                    carve_passage(x + dx, y + dy, dx, dy)
-                x += dx
-                y += dy
-
-        num_dots = 0
-        doors = 0
-
-        # Initialize the grid with walls
-        grid[:] = ['#' for _ in range(width)]
-        for row in grid:
-            row[:] = ['#' for _ in range(height)]
-
-        # Create rooms
-        create_room(2, 2, width - 4, height - 4)
-
-        # Add doors to rooms
-        for x in range(2, width - 2, 4):
-            for y in range(2, height - 2, 4):
-                if random.random() < 0.5:
-                    add_door(x, y)
-
-        # Carve passages
-        carve_passage(1, random.randint(0, height - 1), 1, 0)
-        carve_passage(width - 2, random.randint(0, height - 1), -1, 0)
-        carve_passage(random.randint(0, width - 1), 1, 0, 1)
-        carve_passage(random.randint(0, width - 1), height - 2, 0, -1)
-
-        # Place stairs up and down
-        stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
-        while grid[stair_y][stair_x] != '.':
-            stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
-        grid[stair_y][stair_x] = '<'
-
-        stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
-        while grid[stair_y][stair_x] != '.':
-            stair_x, stair_y = random.randint(0, width - 1), random.randint(0, height - 1)
-        grid[stair_y][stair_x] = '>'
-
-        # Ensure there is a path from the stair up to the stair down
-        carve_passage(stair_x, stair_y, (stair_x - stair_x % 2) * -1, (stair_y - stair_y % 2) * -1)
-
-        # Add extra floor cells to meet the required density
-        while num_dots < (width * height) * 0.4:
-            x, y = random.randint(0, width - 1), random.randint(0, height - 1)
-            if grid[y][x] == '#':
-                num_dots += 1
-                grid[y][x] = '.'
-            # Ensure there are no isolated floor cells
-            for x in range(width):
-                for y in range(height):
-                    if grid[y][x] == '.':
-                        if (grid[max(0, y - 1)][x] not in ('#', '.') or
-                                grid[min(height - 1, y + 1)][x] not in ('#', '.') or
-                                grid[y][max(0, x - 1)] not in ('#', '.') or
-                                grid[y][min(width - 1, x + 1)] not in ('#', '.')):
-                            grid[y][x] = '#'
-                            num_dots -= 1
-
-            # Ensure there are at least 2 walls between rooms
-            for x in range(2, width - 2, 4):
-                for y in range(2, height - 2, 4):
-                    if grid[y][x] == '.' and grid[y][x + 2] == '.':
-                        if random.random() < 0.5:
-                            grid[y + 1][x + 1] = '#'
-                            num_dots -= 1
-                        if random.random() < 0.5:
-                            grid[y - 1][x + 1] = '#'
-                            num_dots -= 1
-                        if random.random() < 0.5:
-                            grid[y + 1][x + 3] = '#'
-                            num_dots -= 1
-                        if random.random() < 0.5:
-                            grid[y - 1][x + 3] = '#'
-                            num_dots -= 1
 
 
     def update_message_window(self, message_window_height=4):
@@ -783,9 +756,6 @@ class Game:
             self.enemies.append(Enemy(**enemy))
         self.add_message(f"Loaded {len(self.enemies)} enemies")
 
-    def generate_level(self):
-        # Logic for generating a random level
-        pass
 
     def load_level(self):
         filename = f"levels/{self.level_filename}"

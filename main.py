@@ -259,6 +259,93 @@ class Game:
         gold_cells = set()
         item_cells = set()
 
+        # Add enemies, potions, and items
+        for _ in range(num_enemies):
+            enemy_cell = random.choice(floor_cells)
+            floor_cells.remove(enemy_cell)
+            if 0 <= enemy_cell[0] < len(self.grid[0]) and 0 <= enemy_cell[1] < len(self.grid):
+                self.grid[enemy_cell[1]][enemy_cell[0]] = 'E'
+                enemy_cells.add(enemy_cell)
+
+        for _ in range(num_potions):
+            potion_cell = random.choice(floor_cells)
+            floor_cells.remove(potion_cell)
+            if 0 <= potion_cell[0] < len(self.grid[0]) and 0 <= potion_cell[1] < len(self.grid):
+                self.grid[potion_cell[1]][potion_cell[0]] = random.choice(
+                    ['H', 'M'])  # H for health potion, M for mana potion
+                potion_cells.add(potion_cell)
+
+        for _ in range(num_gold):
+            gold_cell = random.choice(floor_cells)
+            floor_cells.remove(gold_cell)
+            if 0 <= gold_cell[0] < len(self.grid[0]) and 0 <= gold_cell[1] < len(self.grid):
+                self.grid[gold_cell[1]][gold_cell[0]] = '$'
+                gold_cells.add(gold_cell)
+
+        for _ in range(num_items):
+            item_cell = random.choice(floor_cells)
+            floor_cells.remove(item_cell)
+            if 0 <= item_cell[0] < len(self.grid[0]) and 0 <= item_cell[1] < len(self.grid):
+                # add a random item from the list of items
+
+
+                item_cells.add(item_cell)
+
+        # Ensure the player is not too close to any items
+        for item_cell in item_cells:
+            if self.distance(self.player_pos, item_cell) < 3:
+                item_cells.remove(item_cell)
+                floor_cells.remove(item_cell)
+                new_item_cell = random.choice(floor_cells)
+                self.grid[new_item_cell[1]][new_item_cell[0]] = self.grid[item_cell[1]][item_cell[0]]
+                floor_cells.remove(new_item_cell)
+                self.grid[item_cell[1]][item_cell[0]] = '.'
+
+        # Add the remaining items to the level
+        for item_cell in item_cells:
+            self.grid[item_cell[1]][item_cell[0]] = self.grid[item_cell[1]][item_cell[0]].capitalize()
+
+        # Ensure the player is not too close to any potions
+        for potion_cell in potion_cells:
+            if self.distance(self.player_pos, potion_cell) < 3:
+                potion_cells.remove(potion_cell)
+                floor_cells.remove(potion_cell)
+                new_potion_cell = random.choice(floor_cells)
+                self.grid[new_potion_cell[1]][new_potion_cell[0]] = self.grid[potion_cell[1]][potion_cell[0]]
+                floor_cells.remove(new_potion_cell)
+                self.grid[potion_cell[1]][potion_cell[0]] = '.'
+
+        # Add the remaining potions to the level
+        for potion_cell in potion_cells:
+            self.grid[potion_cell[1]][potion_cell[0]] = self.grid[potion_cell[1]][potion_cell[0]].capitalize()
+
+        # Ensure the player is not too close to any gold
+        for gold_cell in gold_cells:
+            if self.distance(self.player_pos, gold_cell) < 3:
+                gold_cells.remove(gold_cell)
+                floor_cells.remove(gold_cell)
+                new_gold_cell = random.choice(floor_cells)
+                self.grid[new_gold_cell[1]][new_gold_cell[0]] = self.grid[gold_cell[1]][gold_cell[0]]
+                floor_cells.remove(new_gold_cell)
+                self.grid[gold_cell[1]][gold_cell[0]] = '.'
+
+        # Add the remaining gold to the level
+        for gold_cell in gold_cells:
+            self.grid[gold_cell[1]][gold_cell[0]] = self.grid[gold_cell[1]][gold_cell[0]].capitalize()
+
+        # Ensure the player is not too close to any enemies
+        for enemy_cell in enemy_cells:
+            if self.distance(self.player_pos, enemy_cell) < 3:
+                enemy_cells.remove(enemy_cell)
+                floor_cells.remove(enemy_cell)
+                new_enemy_cell = random.choice(floor_cells)
+                self.grid[new_enemy_cell[1]][new_enemy_cell[0]] = self.grid[enemy_cell[1]][enemy_cell[0]]
+                floor_cells.remove(new_enemy_cell)
+                self.grid[enemy_cell[1]][enemy_cell[0]] = '.'
+
+        # Add the remaining enemies to the level
+        for enemy_cell in enemy_cells:
+            self.grid[enemy_cell[1]][enemy_cell[0]] = self.grid[enemy_cell[1]][enemy_cell[0]].capitalize()
 
     def generate_level(self, width, height, num_rooms, num_enemies, num_potions, num_items):
         def create_room(x, y, w, h):
@@ -323,11 +410,12 @@ class Game:
         while not stairs_placed:
             stair_room_index = random.randint(0, num_rooms - 1)
             if rooms[stair_room_index][4] > 0:
-                self.grid[rooms[stair_room_index][1] + random.randint(0, rooms[stair_room_index][3] - 1)] \
-                    [rooms[stair_room_index][0] + random.randint(0, rooms[stair_room_index][2] - 1)] = '<'
-                self.grid[rooms[stair_room_index][1] + random.randint(0, rooms[stair_room_index][3] - 1)] \
-                    [rooms[stair_room_index][0] + random.randint(0, rooms[stair_room_index][2] - 1)] = '>'
-                stairs_placed = True
+                stair_x = rooms[stair_room_index][0] + random.randint(0, rooms[stair_room_index][2] - 1)
+                stair_y = rooms[stair_room_index][1] + random.randint(0, rooms[stair_room_index][3] - 1)
+                if self.grid[stair_y][stair_x] == '.':
+                    self.grid[stair_y][stair_x] = '<'
+                    self.entry_point = (stair_x, stair_y)
+                    stairs_placed = True
 
         # Connect rooms
         for i in range(num_rooms):
@@ -349,32 +437,6 @@ class Game:
                         [rooms[i][0] + random.randint(0, rooms[i][2] - 1)] = '.'
                     self.grid[rooms[j][1] + random.randint(0, rooms[j][3] - 1)] \
                         [rooms[j][0] + random.randint(0, rooms[j][2] - 1)] = '.'
-
-        # Add enemies, potions, and items
-        for _ in range(num_enemies):
-            while True:
-                room_index = random.randint(0, num_rooms - 1)
-                if rooms[room_index][4] > 0:
-                    self.grid[rooms[room_index][1] + random.randint(0, rooms[room_index][3] - 1)] \
-                        [rooms[room_index][0] + random.randint(0, rooms[room_index][2] - 1)] = 'E'
-                    break
-
-        for _ in range(num_potions):
-            while True:
-                room_index = random.randint(0, num_rooms - 1)
-                if rooms[room_index][4] > 0:
-                    self.grid[rooms[room_index][1] + random.randint(0, rooms[room_index][3] - 1)] \
-                        [rooms[room_index][0] + random.randint(0, rooms[room_index][2] - 1)] = 'P'
-                    break
-
-        for _ in range(num_items):
-            while True:
-                room_index = random.randint(0, num_rooms - 1)
-                if rooms[room_index][4] > 0:
-                    self.grid[rooms[room_index][1] + random.randint(0, rooms[room_index][3] - 1)] \
-                        [rooms[room_index][0] + random.randint(0, rooms[room_index][2] - 1)] = 'T'
-                    break
-
 
     def update_message_window(self, message_window_height=4):
         max_width = self.message_window.getmaxyx()[1]

@@ -1,10 +1,18 @@
-2024-09-12 17:18:47,618 Start main
-2024-09-12 17:18:47,619 
+2024-09-13 13:29:40,462 Start main
+2024-09-13 13:29:40,463 
 Create Game
-2024-09-12 17:18:47,620 Loading weapons from 'game/weapons.json'
-2024-09-12 17:18:47,620 Loaded 11 weapons
-2024-09-12 17:18:47,620 Loading enemies from 'game/enemies.json'
-2024-09-12 17:18:47,621 Loaded 30 enemies
-2024-09-12 17:18:47,621 Loading level 1 from levels
-2024-09-12 17:18:47,621 Level 1 loaded successfully
-2024-09-12 17:18:47,621 Level data: width=40, height=20, grid size=20x40
+2024-09-13 13:29:40,464 Loading weapons from 'game/weapons.json'
+2024-09-13 13:29:40,464 Loaded 11 weapons
+2024-09-13 13:29:40,464 Loading enemies from 'game/enemies.json'
+2024-09-13 13:29:40,464 Loaded 30 enemies
+2024-09-13 13:29:40,464 Loading level 1 from levels
+2024-09-13 13:29:40,464 Level 1 loaded successfully
+2024-09-13 13:29:40,464 Level data: width=40, height=20, grid size=20x40
+2024-09-13 13:29:57,477 Game initialized
+2024-09-13 13:29:57,479 Creating Player New Player with 25 HP and a Rusty Dagger
+2024-09-13 13:30:05,028 new_cell=., dy=-1, dx=0, new_y=1, new_x=2
+2024-09-13 13:30:05,028 You moved.
+2024-09-13 13:30:05,699 new_cell=., dy=-1, dx=0, new_y=0, new_x=2
+2024-09-13 13:30:05,699 You moved.
+2024-09-13 13:30:06,216 new_cell=M, dy=0, dx=-1, new_y=0, new_x=1
+2024-09-13 13:30:06,216 You found a mana potion

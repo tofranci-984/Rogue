@@ -19,7 +19,7 @@ ch.setLevel(logging.DEBUG)
 logging.basicConfig(filename='log.txt', filemode='w', format='%(asctime)s %(message)s',
                     level=logging.DEBUG)  # filemode= w will overwrite file each time
 
-# Define the level-up experience points
+# Define the level-up experience points (total, not additional)
 level_up_experience = [
     20, 50, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000
 ]

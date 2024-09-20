@@ -6,9 +6,6 @@ import logging
 import random
 import pygame
 import os
-from rich import print
-from rich.console import Console
-from rich.text import Text
 
 pygame.init()
 pygame.mixer.init()
